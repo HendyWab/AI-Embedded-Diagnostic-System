@@ -1,57 +1,123 @@
-# ==============================================================
-#
-#  Intelligent Embedded Diagnostic System (IEDS)
-#  Telemetry Routes
-#
-#  File: telemetry.py
-#
-# ==============================================================
-
 from fastapi import APIRouter
 
-from backend.models.telemetry_model import TelemetryModel
+from backend.models.telemetry_model import (
+    TelemetryModel
+)
 
-# ==============================================================
-#                      ROUTER INSTANCE
-# ==============================================================
+from backend.services.websocket_manager import (
+    manager
+)
 
 router = APIRouter()
 
-# ==============================================================
-#                      MOCK STORAGE
-# ==============================================================
+# =========================================
+# MEMORY STORAGE
+# =========================================
 
-telemetry_storage = []
+latest_telemetry = None
 
-# ==============================================================
-#                      TELEMETRY ENDPOINTS
-# ==============================================================
+telemetry_history = []
 
-@router.post("/")
-async def ingest_telemetry(
-    payload: TelemetryModel
+MAX_HISTORY = 50
+
+
+# =========================================
+# RECEIVE TELEMETRY
+# =========================================
+
+@router.post("/telemetry")
+async def receive_telemetry(
+    telemetry: TelemetryModel
 ):
-    """
-    Ingest telemetry payload from embedded device.
-    """
 
-    telemetry_storage.append(payload)
+    global latest_telemetry
+
+    # -------------------------------------
+    # STORE LATEST
+    # -------------------------------------
+
+    latest_telemetry = telemetry
+
+    # -------------------------------------
+    # STORE HISTORY
+    # -------------------------------------
+
+    telemetry_history.append(
+        telemetry.dict()
+    )
+
+    # -------------------------------------
+    # LIMIT BUFFER
+    # -------------------------------------
+
+    if len(telemetry_history) > MAX_HISTORY:
+
+        telemetry_history.pop(0)
+
+    # -------------------------------------
+    # WEBSOCKET BROADCAST
+    # -------------------------------------
+
+    await manager.broadcast(
+        telemetry.dict()
+    )
 
     return {
-        "status": "telemetry_received",
-        "device_id": payload.device_id
+
+        "status":
+        "received",
+
+        "device":
+        telemetry.device_id
+
     }
 
 
-@router.get("/latest")
+# =========================================
+# GET LATEST
+# =========================================
+
+@router.get("/telemetry/latest")
 async def get_latest_telemetry():
-    """
-    Returns latest telemetry payload.
-    """
 
-    if not telemetry_storage:
-        return {
-            "status": "no_telemetry_available"
-        }
+    if latest_telemetry:
 
-    return telemetry_storage[-1]
+        return latest_telemetry.dict()
+
+    return {
+
+        "message":
+        "No telemetry available"
+
+    }
+
+
+# =========================================
+# GET HISTORY
+# =========================================
+
+@router.get("/telemetry/history")
+async def get_telemetry_history():
+
+    return telemetry_history
+
+
+# =========================================
+# DEVICE STATUS
+# =========================================
+
+@router.get("/device/status")
+async def device_status():
+
+    return {
+
+        "registered_devices": 1,
+
+        "backend_status": "operational",
+
+        "websocket_status": "active",
+
+        "telemetry_buffer":
+        len(telemetry_history)
+
+    }

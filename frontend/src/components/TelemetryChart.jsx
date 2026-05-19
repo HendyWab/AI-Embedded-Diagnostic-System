@@ -99,9 +99,7 @@ function TelemetryChart()
                     "0px 0px 10px rgba(0,0,0,0.4)"
             }}
         >
-            <h2>
-                Live Telemetry Analytics
-            </h2>
+            
 
             <ResponsiveContainer
                 width="100%"

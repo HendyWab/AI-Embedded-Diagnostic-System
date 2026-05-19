@@ -7,34 +7,31 @@
 
 from fastapi import FastAPI
 
-from fastapi.middleware.cors import CORSMiddleware
-
-from backend.routes.telemetry import \
-    router as telemetry_router
-
-from backend.routes.device import \
-    router as device_router
-
-# ==============================================================
-#                      APPLICATION INSTANCE
-# ==============================================================
-
-app = FastAPI(
-    title="IEDS Backend Platform",
-    description="AI-assisted embedded diagnostic backend",
-    version="0.1.0"
+from fastapi.middleware.cors import (
+    CORSMiddleware
 )
 
-# ==============================================================
-#                      CORS CONFIGURATION
-# ==============================================================
+from backend.routes.telemetry import (
+    router as telemetry_router
+)
+
+from backend.routes.websocket import (
+    router as websocket_router
+)
+
+app = FastAPI(
+    title=
+    "AI-Embedded-Diagnostic-System"
+)
+
+# =========================================
+# CORS
+# =========================================
 
 app.add_middleware(
     CORSMiddleware,
 
-    allow_origins=[
-        "http://localhost:5173"
-    ],
+    allow_origins=["*"],
 
     allow_credentials=True,
 
@@ -43,31 +40,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ==============================================================
-#                      ROUTE REGISTRATION
-# ==============================================================
+# =========================================
+# ROUTES
+# =========================================
 
 app.include_router(
-    telemetry_router,
-    prefix="/telemetry",
-    tags=["Telemetry"]
+    telemetry_router
 )
 
 app.include_router(
-    device_router,
-    prefix="/device",
-    tags=["Device"]
+    websocket_router
 )
 
-# ==============================================================
-#                      ROOT ENDPOINT
-# ==============================================================
+# =========================================
+# ROOT
+# =========================================
 
 @app.get("/")
 async def root():
 
     return {
-        "platform": "IEDS Backend",
-        "status": "running",
-        "version": "0.1.0"
+
+        "message":
+        "AI Embedded Diagnostic System Backend Running",
+
+        "status":
+        "operational"
+
     }

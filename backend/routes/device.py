@@ -1,12 +1,3 @@
-# ==============================================================
-#
-#  Intelligent Embedded Diagnostic System (IEDS)
-#  Device Routes
-#
-#  File: device.py
-#
-# ==============================================================
-
 from fastapi import APIRouter
 
 from backend.models.device_model import DeviceModel
