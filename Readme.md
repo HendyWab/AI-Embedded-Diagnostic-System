@@ -350,19 +350,13 @@ real-time-systems
 
 Embedded Systems • AI-Assisted Diagnostics • Telemetry Engineering • Intelligent Electronic Systems
 
-<p align="center">
+<div align="center">
 
-  <a
-    href="https://www.linkedin.com/in/nangndi-wabede-292318272"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <img
-      src="https://img.shields.io/badge/LinkedIn-NANGNDI%20Wabede-blue?style=for-the-badge&logo=linkedin"
-    />
-  </a>
+<a href="https://linkedin.com/in/nangndi-wabede-292318272">
+  <img src="https://skillicons.dev/icons?i=linkedin" height="55"/>
+</a>
 
-</p>
+</div>
 
 ---
 
