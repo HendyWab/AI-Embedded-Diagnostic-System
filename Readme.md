@@ -350,11 +350,19 @@ real-time-systems
 
 Embedded Systems • AI-Assisted Diagnostics • Telemetry Engineering • Intelligent Electronic Systems
 
-GitHub:
-https://github.com/HendyWab
+<p align="center">
 
-LinkedIn:
-https://www.linkedin.com/in/nangndi-wabede-292318272
+  <a
+    href="https://www.linkedin.com/in/nangndi-wabede-292318272"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <img
+      src="https://img.shields.io/badge/LinkedIn-NANGNDI%20Wabede-blue?style=for-the-badge&logo=linkedin"
+    />
+  </a>
+
+</p>
 
 ---
 
