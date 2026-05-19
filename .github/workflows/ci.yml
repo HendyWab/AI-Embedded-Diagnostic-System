@@ -1,0 +1,151 @@
+# ==============================================================
+#
+#  Intelligent Embedded Diagnostic System (IEDS)
+#  CI/CD Workflow
+#
+#  File: ci.yml
+#
+# ==============================================================
+
+name: IEDS CI Pipeline
+
+# ==============================================================
+#                      TRIGGERS
+# ==============================================================
+
+on:
+
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
+    branches:
+      - main
+
+# ==============================================================
+#                      JOBS
+# ==============================================================
+
+jobs:
+
+  # ============================================================
+  #                      BACKEND VALIDATION
+  # ============================================================
+
+  backend-validation:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # --------------------------------------------------------
+      # Checkout Repository
+      # --------------------------------------------------------
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # --------------------------------------------------------
+      # Setup Python
+      # --------------------------------------------------------
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+
+        with:
+          python-version: "3.11"
+
+      # --------------------------------------------------------
+      # Install Dependencies
+      # --------------------------------------------------------
+
+      - name: Install Backend Dependencies
+
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # --------------------------------------------------------
+      # Validate FastAPI Backend
+      # --------------------------------------------------------
+
+      - name: Validate Backend Import
+
+        run: |
+          python -c "from backend.main import app"
+
+  # ============================================================
+  #                      DOCKER VALIDATION
+  # ============================================================
+
+  docker-validation:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # --------------------------------------------------------
+      # Checkout Repository
+      # --------------------------------------------------------
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # --------------------------------------------------------
+      # Build Docker Container
+      # --------------------------------------------------------
+
+      - name: Build Docker Image
+
+        run: |
+          docker build -t ieds-backend .
+
+  # ============================================================
+  #                      FIRMWARE BUILD
+  # ============================================================
+
+  firmware-build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # --------------------------------------------------------
+      # Checkout Repository
+      # --------------------------------------------------------
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # --------------------------------------------------------
+      # Install Build Tools
+      # --------------------------------------------------------
+
+      - name: Install CMake
+
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential
+
+      # --------------------------------------------------------
+      # Configure Build
+      # --------------------------------------------------------
+
+      - name: Configure Firmware Build
+
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+
+      # --------------------------------------------------------
+      # Compile Firmware
+      # --------------------------------------------------------
+
+      - name: Build Firmware
+
+        run: |
+          cd build
+          make

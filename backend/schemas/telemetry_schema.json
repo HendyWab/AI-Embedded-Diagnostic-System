@@ -1,0 +1,81 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+
+    "title": "IEDS Telemetry Schema",
+
+    "description":
+    "Telemetry payload schema for embedded diagnostics and cloud synchronization.",
+
+    "type": "object",
+
+    "properties":
+    {
+        "timestamp":
+        {
+            "type": "integer"
+        },
+
+        "device_id":
+        {
+            "type": "string"
+        },
+
+        "firmware_version":
+        {
+            "type": "string"
+        },
+
+        "anomaly_score":
+        {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+        },
+
+        "signal_quality":
+        {
+            "type": "number"
+        },
+
+        "emi_detected":
+        {
+            "type": "boolean"
+        },
+
+        "topk_predictions":
+        {
+            "type": "array",
+
+            "items":
+            {
+                "type": "object",
+
+                "properties":
+                {
+                    "fault_class":
+                    {
+                        "type": "string"
+                    },
+
+                    "confidence":
+                    {
+                        "type": "number"
+                    }
+                },
+
+                "required":
+                [
+                    "fault_class",
+                    "confidence"
+                ]
+            }
+        }
+    },
+
+    "required":
+    [
+        "timestamp",
+        "device_id",
+        "anomaly_score"
+    ]
+}

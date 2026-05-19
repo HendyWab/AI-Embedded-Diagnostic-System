@@ -1,0 +1,64 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+
+    "title": "IEDS OTA Report Schema",
+
+    "description":
+    "Firmware OTA update lifecycle schema.",
+
+    "type": "object",
+
+    "properties":
+    {
+        "current_version":
+        {
+            "type": "string"
+        },
+
+        "target_version":
+        {
+            "type": "string"
+        },
+
+        "update_state":
+        {
+            "type": "string",
+
+            "enum":
+            [
+                "IDLE",
+                "CHECKING",
+                "DOWNLOADING",
+                "VERIFYING",
+                "APPLYING",
+                "COMPLETED",
+                "ROLLBACK",
+                "FAILED"
+            ]
+        },
+
+        "progress_percent":
+        {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+        },
+
+        "rollback_available":
+        {
+            "type": "boolean"
+        },
+
+        "integrity_verified":
+        {
+            "type": "boolean"
+        }
+    },
+
+    "required":
+    [
+        "current_version",
+        "update_state",
+        "progress_percent"
+    ]
+}

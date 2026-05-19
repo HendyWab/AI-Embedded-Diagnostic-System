@@ -1,0 +1,67 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+
+    "title": "IEDS Device Status Schema",
+
+    "description":
+    "Runtime device monitoring and telemetry status.",
+
+    "type": "object",
+
+    "properties":
+    {
+        "device_id":
+        {
+            "type": "string"
+        },
+
+        "wifi_connected":
+        {
+            "type": "boolean"
+        },
+
+        "mqtt_connected":
+        {
+            "type": "boolean"
+        },
+
+        "system_health":
+        {
+            "type": "string",
+
+            "enum":
+            [
+                "NORMAL",
+                "WARNING",
+                "CRITICAL"
+            ]
+        },
+
+        "firmware_version":
+        {
+            "type": "string"
+        },
+
+        "uptime_seconds":
+        {
+            "type": "integer"
+        },
+
+        "cpu_usage":
+        {
+            "type": "number"
+        },
+
+        "memory_usage":
+        {
+            "type": "number"
+        }
+    },
+
+    "required":
+    [
+        "device_id",
+        "wifi_connected",
+        "mqtt_connected"
+    ]
+}

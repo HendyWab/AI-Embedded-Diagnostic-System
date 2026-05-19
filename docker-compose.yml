@@ -1,0 +1,58 @@
+# ==============================================================
+#
+#  Intelligent Embedded Diagnostic System (IEDS)
+#  Docker Compose Infrastructure
+#
+# ==============================================================
+
+version: "3.9"
+
+# ==============================================================
+#                      SERVICES
+# ==============================================================
+
+services:
+
+  # ============================================================
+  #                      FASTAPI BACKEND
+  # ============================================================
+
+  backend:
+
+    build:
+      context: .
+
+    container_name: ieds_backend
+
+    ports:
+      - "8000:8000"
+
+    restart: unless-stopped
+
+    depends_on:
+      - mqtt
+
+    environment:
+      MQTT_BROKER: mqtt
+      MQTT_PORT: 1883
+
+  # ============================================================
+  #                      MQTT BROKER
+  # ============================================================
+
+  mqtt:
+
+    image: eclipse-mosquitto:2
+
+    container_name: ieds_mqtt
+
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+
+    restart: unless-stopped
+
+    volumes:
+      - ./infrastructure/mosquitto/config:/mosquitto/config
+      - ./infrastructure/mosquitto/data:/mosquitto/data
+      - ./infrastructure/mosquitto/log:/mosquitto/log

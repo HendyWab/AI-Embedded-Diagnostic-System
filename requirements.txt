@@ -1,0 +1,17 @@
+# ==============================================================
+#
+#  Intelligent Embedded Diagnostic System (IEDS)
+#  Python Dependencies
+#
+# ==============================================================
+
+fastapi==0.115.0
+
+uvicorn==0.30.6
+
+pydantic==2.9.2
+
+python-multipart==0.0.9
+
+paho-mqtt==2.1.0
+requests==2.32.3

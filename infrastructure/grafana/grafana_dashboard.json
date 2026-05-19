@@ -1,0 +1,124 @@
+{
+    "title": "IEDS Embedded Diagnostics Dashboard",
+
+    "timezone": "browser",
+
+    "schemaVersion": 38,
+
+    "version": 1,
+
+    "refresh": "5s",
+
+    "panels":
+    [
+        {
+            "type": "stat",
+
+            "title": "Telemetry Ingestion Rate",
+
+            "gridPos":
+            {
+                "x": 0,
+                "y": 0,
+                "w": 6,
+                "h": 4
+            },
+
+            "targets":
+            [
+                {
+                    "expr":
+                    "rate(telemetry_ingestion_total[1m])"
+                }
+            ]
+        },
+
+        {
+            "type": "gauge",
+
+            "title": "AI Anomaly Score",
+
+            "gridPos":
+            {
+                "x": 6,
+                "y": 0,
+                "w": 6,
+                "h": 4
+            },
+
+            "targets":
+            [
+                {
+                    "expr":
+                    "ieds_anomaly_score"
+                }
+            ]
+        },
+
+        {
+            "type": "timeseries",
+
+            "title": "WiFi Signal Strength",
+
+            "gridPos":
+            {
+                "x": 0,
+                "y": 4,
+                "w": 12,
+                "h": 8
+            },
+
+            "targets":
+            [
+                {
+                    "expr":
+                    "ieds_wifi_rssi"
+                }
+            ]
+        },
+
+        {
+            "type": "timeseries",
+
+            "title": "MQTT Telemetry Activity",
+
+            "gridPos":
+            {
+                "x": 12,
+                "y": 4,
+                "w": 12,
+                "h": 8
+            },
+
+            "targets":
+            [
+                {
+                    "expr":
+                    "ieds_mqtt_messages_total"
+                }
+            ]
+        },
+
+        {
+            "type": "table",
+
+            "title": "Top-K Diagnostic Predictions",
+
+            "gridPos":
+            {
+                "x": 0,
+                "y": 12,
+                "w": 24,
+                "h": 8
+            },
+
+            "targets":
+            [
+                {
+                    "expr":
+                    "ieds_topk_predictions"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+
+    "title": "IEDS Diagnostic Report Schema",
+
+    "description":
+    "Embedded AI diagnostic report structure.",
+
+    "type": "object",
+
+    "properties":
+    {
+        "report_id":
+        {
+            "type": "string"
+        },
+
+        "diagnostic_class":
+        {
+            "type": "string"
+        },
+
+        "detected_faults":
+        {
+            "type": "array",
+
+            "items":
+            {
+                "type": "string"
+            }
+        },
+
+        "confidence":
+        {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+        },
+
+        "recommendation":
+        {
+            "type": "string"
+        },
+
+        "severity":
+        {
+            "type": "string",
+
+            "enum":
+            [
+                "LOW",
+                "MEDIUM",
+                "HIGH",
+                "CRITICAL"
+            ]
+        }
+    },
+
+    "required":
+    [
+        "report_id",
+        "diagnostic_class",
+        "confidence"
+    ]
+}
