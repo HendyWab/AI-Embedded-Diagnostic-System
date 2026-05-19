@@ -1,386 +1,336 @@
-# AI-Embedded-Diagnostic-System
-
-<div align="center">
-
-## DDEI — AI-Assisted Embedded Telemetry & Diagnostic Platform
+# INTELLIGENT-EMBEDDED-DIAGNOSTIC-SYSTEM
 
 <p align="center">
-<img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=23&pause=1200&color=2563EB&center=true&vCenter=true&width=950&lines=AI-Assisted+Embedded+Diagnostics;Real-Time+Telemetry+%7C+EMI+Monitoring;FastAPI+%7C+React+Dashboard;Signal+Analysis+%7C+Anomaly+Detection;ESP32+%7C+PIC+%7C+STM32;Embedded+Observability+Platform" />
+  <img src="https://img.shields.io/badge/Embedded-AI%20Diagnostics-0A192F?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi" />
+  <img src="https://img.shields.io/badge/React-Frontend-61DAFB?style=for-the-badge&logo=react" />
+  <img src="https://img.shields.io/badge/Telemetry-RealTime-FF6B6B?style=for-the-badge" />
 </p>
-
-<p align="center">
-
-<img src="https://img.shields.io/badge/Embedded_Systems-2563EB?style=for-the-badge" />
-
-<img src="https://img.shields.io/badge/Artificial_Intelligence-374151?style=for-the-badge" />
-
-<img src="https://img.shields.io/badge/Real_Time_Telemetry-0F766E?style=for-the-badge" />
-
-<img src="https://img.shields.io/badge/EMI_Monitoring-DC2626?style=for-the-badge" />
-
-<img src="https://img.shields.io/badge/Electronic_Diagnostics-7C3AED?style=for-the-badge" />
-
-</p>
-
-</div>
 
 ---
 
-<div align="center">
+## AI-Assisted Electronic Diagnostics, Intelligent Signal Analysis and Wireless Telemetry Platform
 
-# 🚀 Project Overview
+The **Intelligent Embedded Diagnostic System (IEDS)** is an AI-assisted embedded observability and telemetry platform designed for real-time electronic diagnostics, anomaly detection, signal monitoring, EMI analysis, and intelligent telemetry visualization.
 
-</div>
+The project combines:
 
-DDEI (Dispositif de Diagnostic Électronique Intelligent) is a real-time AI-assisted embedded observability and electronic diagnostic platform designed for telemetry acquisition, anomaly detection, EMI-aware monitoring, and intelligent embedded diagnostics.
-
-The system combines embedded acquisition, telemetry infrastructure, AI-assisted interpretation, and real-time visualization to create a scalable diagnostic ecosystem for intelligent electronic analysis.
-
-The platform currently integrates:
-
-- Real-time telemetry acquisition
-- EMI anomaly alerting
-- AI-assisted anomaly scoring
-- Embedded signal monitoring
-- FastAPI backend services
-- React-based diagnostic dashboard
+- Embedded telemetry acquisition
+- Real-time backend processing
+- AI-assisted anomaly detection
+- Signal observability
 - Wireless telemetry workflows
-- Live engineering visualization
+- Interactive engineering dashboards
 
-The project focuses on bridging embedded electronics, telemetry infrastructure, and intelligent diagnostic analysis into a unified modern monitoring architecture.
-
----
-
-<div align="center">
-
-# ⚡ Key Features
-
-</div>
-
-- 🧠 AI-assisted anomaly analysis
-- ⚡ EMI anomaly alert system
-- 📡 Real-time embedded telemetry
-- 📊 Live telemetry visualization dashboard
-- 🔌 Embedded signal acquisition
-- 📈 Real-time electronic parameter monitoring
-- ☁️ FastAPI + React monitoring architecture
-- 🧪 Telemetry simulation workflows
-- 🔒 Wireless telemetry infrastructure
-- 🧠 Intelligent fault interpretation
-- ⚠️ Electronic anomaly detection engine
-- 📡 Distributed embedded diagnostics
+The system is designed as a scalable architecture for:
+- embedded diagnostics
+- intelligent instrumentation
+- electronic fault analysis
+- EMI monitoring
+- predictive observability workflows
 
 ---
 
-<div align="center">
+# System Architecture
 
-# 🏗️ System Architecture
-
-<img src="docs/architecture/IES-Diag-System-Architecture.png" width="100%" />
-
-<br><br>
-
-</div>
+<p align="center">
+  <img src="./assets/ieds_architecture_v2.png" width="100%" />
+</p>
 
 ---
 
-<div align="center">
+# Features
 
-# 📊 Real-Time Monitoring Dashboard
-
-</div>
-
-The platform includes a modern React-based diagnostic dashboard capable of visualizing live telemetry streams and embedded diagnostic observables in real time.
-
-Current dashboard capabilities include:
-
-* Live telemetry acquisition
-* Real-time signal quality visualization
-* AI anomaly scoring
-* EMI alert visualization
-* Embedded device monitoring
-* Telemetry simulation integration
-* Dynamic diagnostic charts
-* Backend operational monitoring
-
-The dashboard architecture is designed to support future waveform analysis, distributed telemetry supervision, and advanced embedded observability workflows.
+- Real-time telemetry dashboard
+- EMI anomaly detection alerts
+- AI-assisted anomaly scoring
+- Live telemetry visualization
+- FastAPI backend architecture
+- React frontend interface
+- Embedded telemetry simulator
+- Dynamic telemetry charts
+- Diagnostic observability workflows
+- Modular embedded diagnostic architecture
 
 ---
 
-<div align="center">
+# Technology Stack
 
-# 🔌 Diagnostic Capabilities
+## Backend
+- FastAPI
+- Python
+- Uvicorn
+- REST API Architecture
 
-</div>
+## Frontend
+- React
+- Vite
+- Recharts
+- Axios
 
-The DDEI architecture is designed to analyze and monitor critical electronic parameters such as:
+## Embedded & Telemetry
+- ESP32 / STM32 / PIC
+- UART / SPI / I2C
+- MQTT-ready architecture
+- Telemetry simulation engine
 
-* Voltage levels
-* Current measurements
-* Signal integrity
-* Communication buses (UART / SPI / I2C)
-* Thermal monitoring
-* Electronic anomalies
-* EMI / Noise observation
-* Hardware status diagnostics
-* Signal quality analysis
-* Embedded telemetry observability
-
----
-
-<div align="center">
-
-# 🛠️ Technology Stack
-
-</div>
-
-<div align="center">
-
-## 🔌 Embedded Systems
-
-<img src="https://skillicons.dev/icons?i=arduino,raspberrypi,linux&theme=dark" />
-
-<br><br>
-
-<img src="https://go-skill-icons.vercel.app/api/icons?i=stm32,esp32&theme=dark" />
-
-<br><br>
-
-<img src="https://img.shields.io/badge/PIC_Microcontrollers-1E3A8A?style=for-the-badge" />
-
-<img src="https://img.shields.io/badge/AVR_&_ATmega-374151?style=for-the-badge" />
-
-</div>
-
-<br>
-
-<div align="center">
-
-## 💻 Backend & Infrastructure
-
-<img src="https://skillicons.dev/icons?i=python,fastapi,nodejs,mongodb,mysql,firebase&theme=dark" />
-
-</div>
-
-<br>
-
-<div align="center">
-
-## 📊 Frontend & Visualization
-
-<img src="https://skillicons.dev/icons?i=react,nextjs,typescript&theme=dark" />
-
-</div>
-
-<br>
-
-<div align="center">
-
-## ☁️ Telemetry & Communication
-
-<img src="https://img.shields.io/badge/MQTT-2563EB?style=for-the-badge" />
-
-<img src="https://img.shields.io/badge/WebSocket-0F766E?style=for-the-badge" />
-
-<img src="https://img.shields.io/badge/WiFi-7C3AED?style=for-the-badge" />
-
-<img src="https://img.shields.io/badge/Bluetooth-374151?style=for-the-badge" />
-
-</div>
+## AI & Diagnostics
+- Anomaly Scoring
+- Signal Analysis
+- EMI Detection
+- Intelligent Observability
 
 ---
 
-<div align="center">
-
-# 🧠 AI & Diagnostic Intelligence
-
-</div>
-
-The AI-assisted diagnostic layer focuses on intelligent interpretation of embedded telemetry and electronic observables.
-
-Current and planned capabilities include:
-
-* AI anomaly scoring
-* Embedded fault interpretation
-* EMI-related anomaly analysis
-* Signal quality evaluation
-* Predictive diagnostic workflows
-* Telemetry pattern analysis
-* Intelligent alert generation
-* Embedded observability assistance
-
-The AI engine is designed as a lightweight diagnostic assistance layer supporting scalable embedded analysis architectures.
-
----
-
-<div align="center">
-
-# 📡 Telemetry Infrastructure
-
-</div>
-
-The telemetry subsystem enables:
-
-* Wireless diagnostic transmission
-* Remote monitoring
-* Real-time communication
-* Distributed diagnostic architectures
-* Cloud synchronization
-* Embedded data acquisition
-* Embedded observability workflows
-
-Supported communication technologies include:
-
-* WiFi
-* Bluetooth
-* MQTT
-* WebSocket
-* Serial communication protocols
-
----
-
-<div align="center">
-
-# 📂 Repository Structure
-
-</div>
+# Project Structure
 
 ```text
-docs/
-hardware/
-firmware/
-backend/
-frontend/
-ai/
-simulator/
-infrastructure/
-````
+AI-Embedded-Diagnostic-System/
+│
+├── backend/
+│   ├── models/
+│   ├── routes/
+│   ├── simulator/
+│   ├── services/
+│   └── main.py
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── services/
+│   │   └── App.jsx
+│   │
+│   └── package.json
+│
+├── assets/
+├── README.md
+└── requirements.txt
+```
 
 ---
 
-<div align="center">
+# Installation
 
-# 🧪 Simulation & Validation
+Clone the repository:
 
-</div>
-
-The project integrates multiple simulation environments for electronic validation and embedded diagnostic analysis.
-
-Simulation objectives include:
-
-* Signal analysis
-* EMI / EMC evaluation
-* Embedded telemetry validation
-* Communication testing
-* Diagnostic verification
-* AI anomaly simulation
-* Real-time telemetry testing
-
-Supported environments include:
-
-* LTspice
-* Proteus
-* MATLAB
+```bash
+git clone https://github.com/HendyWab/AI-Embedded-Diagnostic-System.git
+cd AI-Embedded-Diagnostic-System
+```
 
 ---
 
-<div align="center">
+# Backend Setup
 
-# 🚧 Development Roadmap
+Create and activate a virtual environment.
 
-</div>
+## Windows
 
-* [x] FastAPI backend architecture
-* [x] React telemetry dashboard
-* [x] Live telemetry acquisition
-* [x] EMI anomaly alert visualization
-* [x] AI anomaly scoring workflows
-* [x] Telemetry simulation engine
-* [x] Real-time chart visualization
-* [ ] Embedded firmware integration
-* [ ] MQTT distributed telemetry layer
-* [ ] Advanced waveform analysis
-* [ ] Persistent telemetry storage
-* [ ] TinyML embedded inference
-* [ ] Advanced signal diagnostics
-* [ ] Hardware synchronization layer
-* [ ] Intelligent predictive diagnostics
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
----
+## Linux/macOS
 
-<div align="center">
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-# 🌍 Future Improvements
+Install backend dependencies:
 
-</div>
-
-* Edge AI acceleration
-* TinyML embedded deployment
-* Advanced predictive diagnostics
-* Industrial communication protocols
-* Advanced waveform analysis
-* Intelligent maintenance systems
-* Distributed embedded observability
-* EMI-aware signal diagnostics
-* AI-assisted waveform interpretation
-* Cloud-scale telemetry analytics
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
-<div align="center">
+# Frontend Setup
 
-# 🌐 Engineering Domains
+Navigate to the frontend directory:
 
-</div>
+```bash
+cd frontend
+```
 
-<div align="center">
+Install frontend dependencies:
 
-| Domain                     | Integration                            |
-| -------------------------- | -------------------------------------- |
-| ⚡ Electronics Engineering  | Embedded diagnostics & signal analysis |
-| 🔌 Embedded Systems        | MCU telemetry & acquisition            |
-| 🤖 Artificial Intelligence | AI-assisted anomaly interpretation     |
-| 📡 Wireless Communication  | Real-time telemetry infrastructure     |
-| ☁️ Cloud Infrastructure    | Distributed monitoring architectures   |
-| 📊 Data Visualization      | Real-time embedded dashboards          |
-| ⚠️ EMI / EMC Engineering   | Noise-aware embedded diagnostics       |
-
-</div>
+```bash
+npm install
+```
 
 ---
 
+# Running the Backend
 
+From the project root:
 
----
+```bash
+uvicorn backend.main:app --reload
+```
 
-<div align="center">
+Backend API:
 
-# 📜 License
+```text
+http://localhost:8000
+```
 
-This project is licensed under the MIT License.
+Swagger Documentation:
 
-</div>
-
----
-
-<div align="center">
-
-# 👨‍💻 Author
-
-### HendyWab / ChendyTronics
-
-Focused on:
-
-Embedded Systems • AI-Assisted Diagnostics • Signal Analysis • Telemetry Infrastructure • Electronic Observability
-
-</div>
+```text
+http://localhost:8000/docs
+```
 
 ---
 
-<div align="center">
+# Running the Frontend
 
-## ⚡ Intelligent Embedded Observability for Next-Generation Electronic Systems
+From the frontend directory:
 
-<img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=22&pause=1200&color=2563EB&center=true&vCenter=true&width=900&lines=C+%7C+C%2B%2B+%7C+Assembly+%7C+Python;Embedded+Systems+%7C+Telemetry;AI+%7C+EMI+Monitoring+%7C+Diagnostics;FastAPI+%7C+React+%7C+Real-Time+Visualization;ESP32+%7C+PIC+%7C+STM32" />
+```bash
+npm run dev
+```
 
-</div>
+Frontend Dashboard:
+
+```text
+http://localhost:5173
+```
+
+---
+
+# Running the Telemetry Simulator
+
+The telemetry simulator generates synthetic embedded telemetry and diagnostic events in real time.
+
+Run the simulator:
+
+```bash
+python backend/simulator/telemetry_simulator.py
+```
+
+The simulator continuously generates:
+- anomaly scores
+- EMI detection states
+- signal quality metrics
+- telemetry packets
+- diagnostic events
+
+---
+
+# Current Development Status
+
+## Implemented
+
+- FastAPI backend
+- React telemetry dashboard
+- Real-time telemetry ingestion
+- Embedded telemetry simulator
+- Live anomaly visualization
+- EMI alert system
+- Dynamic telemetry charts
+- Real-time dashboard updates
+
+## In Progress
+
+- WebSocket telemetry streaming
+- Persistent telemetry storage
+- MQTT integration
+- ESP32 hardware integration
+- AI anomaly engine improvements
+- Multi-device telemetry support
+
+---
+
+# Engineering Objectives
+
+The platform aims to provide:
+
+- Real-time electronic observability
+- Intelligent anomaly diagnostics
+- Embedded telemetry acquisition
+- Wireless diagnostic communication
+- Predictive electronic analysis
+- AI-assisted engineering workflows
+
+---
+
+# Future Roadmap
+
+- WebSocket telemetry infrastructure
+- Persistent telemetry database
+- MQTT broker integration
+- ESP32 firmware deployment
+- Advanced waveform visualization
+- TinyML anomaly inference
+- Multi-device observability
+- Cloud telemetry synchronization
+- Predictive maintenance analytics
+
+---
+
+# Screenshots
+
+## Real-Time Telemetry Dashboard
+
+<p align="center">
+  <img src="./assets/dashboard_preview.png" width="100%" />
+</p>
+
+---
+
+# GitHub Project Management
+
+This repository uses:
+- GitHub Projects
+- Engineering milestones
+- Issue tracking
+- Observability roadmap management
+
+Project workflow includes:
+- telemetry infrastructure
+- embedded integration
+- AI diagnostic systems
+- frontend/backend evolution
+- observability engineering
+
+---
+
+# Repository Topics
+
+```text
+embedded-systems
+telemetry
+fastapi
+react
+ai-diagnostics
+observability
+iot
+electronics
+signal-processing
+mqtt
+esp32
+dashboard
+anomaly-detection
+wireless-telemetry
+real-time-systems
+```
+
+---
+
+# Author
+
+**Hendy Wabede**
+
+Embedded Systems • AI Diagnostics • Telemetry Engineering • Intelligent Electronic Systems
+
+---
+
+# License
+
+This project is intended for:
+- research
+- engineering experimentation
+- educational purposes
+- embedded observability development
