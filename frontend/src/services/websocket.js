@@ -1,9 +1,12 @@
 const WEBSOCKET_URL =
     "ws://localhost:8000/ws/telemetry";
 
-
 let socket = null;
 
+
+// =========================================
+// CONNECT
+// =========================================
 
 export function connectWebSocket(
     onMessage
@@ -13,12 +16,33 @@ export function connectWebSocket(
         WEBSOCKET_URL
     );
 
+    // -------------------------------------
+    // OPEN
+    // -------------------------------------
+
     socket.onopen = () =>
     {
         console.log(
             "WebSocket connected"
         );
+
+        // keep-alive ping
+
+        setInterval(() =>
+        {
+            if (
+                socket.readyState === 1
+            )
+            {
+                socket.send("ping");
+            }
+
+        }, 5000);
     };
+
+    // -------------------------------------
+    // RECEIVE
+    // -------------------------------------
 
     socket.onmessage = (
         event
@@ -32,11 +56,17 @@ export function connectWebSocket(
         onMessage(data);
     };
 
+    // -------------------------------------
+    // CLOSE
+    // -------------------------------------
+
     socket.onclose = () =>
     {
         console.log(
             "WebSocket disconnected"
         );
+
+        // auto reconnect
 
         setTimeout(() =>
         {
@@ -46,6 +76,10 @@ export function connectWebSocket(
 
         }, 3000);
     };
+
+    // -------------------------------------
+    // ERROR
+    // -------------------------------------
 
     socket.onerror = (
         error

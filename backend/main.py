@@ -1,15 +1,25 @@
-# ==============================================================
-#
-#  Intelligent Embedded Diagnostic System (IEDS)
-#  FastAPI Backend Entry Point
-#
-# ==============================================================
-
 from fastapi import FastAPI
 
 from fastapi.middleware.cors import (
     CORSMiddleware
 )
+
+# =========================================
+# DATABASE
+# =========================================
+
+from backend.database.db import (
+    engine,
+    Base
+)
+
+from backend.models.telemetry_db_model import (
+    TelemetryRecord
+)
+
+# =========================================
+# ROUTES
+# =========================================
 
 from backend.routes.telemetry import (
     router as telemetry_router
@@ -18,6 +28,18 @@ from backend.routes.telemetry import (
 from backend.routes.websocket import (
     router as websocket_router
 )
+
+# =========================================
+# CREATE DATABASE TABLES
+# =========================================
+
+Base.metadata.create_all(
+    bind=engine
+)
+
+# =========================================
+# FASTAPI APP
+# =========================================
 
 app = FastAPI(
     title=
@@ -53,7 +75,7 @@ app.include_router(
 )
 
 # =========================================
-# ROOT
+# ROOT ENDPOINT
 # =========================================
 
 @app.get("/")
