@@ -34,7 +34,7 @@ The system is designed as a scalable architecture for:
 # System Architecture
 
 <p align="center">
-  <img src="./assets/ieds_architecture_v2.png" width="100%" />
+  <img src="./assets/architecure/ieds_architecture_v2.png" width="100%" />
 </p>
 
 ---
