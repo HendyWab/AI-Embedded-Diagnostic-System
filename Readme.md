@@ -34,7 +34,7 @@ The system is designed as a scalable architecture for:
 # System Architecture
 
 <p align="center">
-  <img src="./assets/architecure/ieds_architecture_v2.png" width="100%" />
+  <img src="./assets/architecture/ieds_architecture_v2.png" width="100%" />
 </p>
 
 ---
@@ -275,7 +275,7 @@ The platform aims to provide:
 ## Real-Time Telemetry Dashboard
 
 <p align="center">
-  <img src="./assets/dashboard_preview.png" width="100%" />
+  <img src="./assets/dashboard/dashboard_preview.png" width="100%" />
 </p>
 
 ---
