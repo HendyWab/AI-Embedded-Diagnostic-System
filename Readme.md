@@ -5,6 +5,7 @@
   <img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi" />
   <img src="https://img.shields.io/badge/React-Frontend-61DAFB?style=for-the-badge&logo=react" />
   <img src="https://img.shields.io/badge/Telemetry-RealTime-FF6B6B?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" />
 </p>
 
 <p align="center">
@@ -15,7 +16,7 @@
 
 ## Real-Time Embedded Observability, Telemetry and AI-Assisted Diagnostic Platform
 
-The **AI-Embedded-Diagnostic-System (IEDS)** is an AI-assisted embedded observability and telemetry platform designed for real-time electronic diagnostics, anomaly detection, EMI analysis, signal monitoring, and intelligent telemetry visualization.
+The **AI-Embedded-Diagnostic-System (IEDS)** is an AI-assisted embedded observability, telemetry, and diagnostic platform designed for real-time electronic diagnostics, anomaly detection, EMI analysis, signal monitoring, and intelligent telemetry visualization.
 
 The platform combines:
 
@@ -341,7 +342,16 @@ real-time-systems
 ```
 
 ---
+# GitHub Analytics
 
+<p align="center">
+  <img
+    height="180em"
+    src="https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api?username=HendyWab&show_icons=true&theme=tokyonight&hide_border=true"
+  />
+</p>
+
+---
 # Author
 
 ## NANGNDI Wabede
