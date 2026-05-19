@@ -1,4 +1,4 @@
-# INTELLIGENT-EMBEDDED-DIAGNOSTIC-SYSTEM
+# AI-Embedded-Diagnostic-System
 
 <p align="center">
   <img src="https://img.shields.io/badge/Embedded-AI%20Diagnostics-0A192F?style=for-the-badge" />
@@ -7,27 +7,34 @@
   <img src="https://img.shields.io/badge/Telemetry-RealTime-FF6B6B?style=for-the-badge" />
 </p>
 
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=22&pause=1200&color=3B82F6&center=true&vCenter=true&width=1000&lines=AI-Assisted+Embedded+Diagnostics;Real-Time+Telemetry+and+Observability;EMI+Monitoring+%7C+Signal+Analysis;FastAPI+%7C+React+%7C+Embedded+Systems;Intelligent+Electronic+Monitoring+Platform" />
+</p>
+
 ---
 
-## AI-Assisted Electronic Diagnostics, Intelligent Signal Analysis and Wireless Telemetry Platform
+## Real-Time Embedded Observability, Telemetry and AI-Assisted Diagnostic Platform
 
-The **Intelligent Embedded Diagnostic System (IEDS)** is an AI-assisted embedded observability and telemetry platform designed for real-time electronic diagnostics, anomaly detection, signal monitoring, EMI analysis, and intelligent telemetry visualization.
+The **AI-Embedded-Diagnostic-System (IEDS)** is an AI-assisted embedded observability and telemetry platform designed for real-time electronic diagnostics, anomaly detection, EMI analysis, signal monitoring, and intelligent telemetry visualization.
 
-The project combines:
+The platform combines:
 
 - Embedded telemetry acquisition
 - Real-time backend processing
 - AI-assisted anomaly detection
-- Signal observability
-- Wireless telemetry workflows
+- Signal observability workflows
+- Wireless telemetry infrastructure
 - Interactive engineering dashboards
+- Embedded diagnostic intelligence
 
 The system is designed as a scalable architecture for:
-- embedded diagnostics
-- intelligent instrumentation
-- electronic fault analysis
+
+- Embedded diagnostics
+- Intelligent instrumentation
+- Electronic fault analysis
 - EMI monitoring
-- predictive observability workflows
+- Predictive observability workflows
+- Real-time telemetry engineering
 
 ---
 
@@ -50,6 +57,7 @@ The system is designed as a scalable architecture for:
 - Embedded telemetry simulator
 - Dynamic telemetry charts
 - Diagnostic observability workflows
+- WebSocket-ready telemetry architecture
 - Modular embedded diagnostic architecture
 
 ---
@@ -57,24 +65,29 @@ The system is designed as a scalable architecture for:
 # Technology Stack
 
 ## Backend
+
 - FastAPI
 - Python
 - Uvicorn
 - REST API Architecture
 
 ## Frontend
+
 - React
 - Vite
-- Recharts
 - Axios
+- Recharts
+- Plotly.js (planned)
 
 ## Embedded & Telemetry
+
 - ESP32 / STM32 / PIC
 - UART / SPI / I2C
 - MQTT-ready architecture
 - Telemetry simulation engine
 
 ## AI & Diagnostics
+
 - Anomaly Scoring
 - Signal Analysis
 - EMI Detection
@@ -103,7 +116,12 @@ AI-Embedded-Diagnostic-System/
 │   └── package.json
 │
 ├── assets/
+│   ├── architecture/
+│   ├── dashboard/
+│   └── logos/
+│
 ├── README.md
+├── LICENSE
 └── requirements.txt
 ```
 
@@ -211,11 +229,12 @@ python backend/simulator/telemetry_simulator.py
 ```
 
 The simulator continuously generates:
-- anomaly scores
+
+- Anomaly scores
 - EMI detection states
-- signal quality metrics
-- telemetry packets
-- diagnostic events
+- Signal quality metrics
+- Telemetry packets
+- Diagnostic events
 
 ---
 
@@ -231,6 +250,7 @@ The simulator continuously generates:
 - EMI alert system
 - Dynamic telemetry charts
 - Real-time dashboard updates
+- GitHub engineering project management workflow
 
 ## In Progress
 
@@ -252,13 +272,14 @@ The platform aims to provide:
 - Embedded telemetry acquisition
 - Wireless diagnostic communication
 - Predictive electronic analysis
+- Embedded observability infrastructure
 - AI-assisted engineering workflows
 
 ---
 
 # Future Roadmap
 
-- WebSocket telemetry infrastructure
+- Real-time WebSocket observability
 - Persistent telemetry database
 - MQTT broker integration
 - ESP32 firmware deployment
@@ -283,17 +304,19 @@ The platform aims to provide:
 # GitHub Project Management
 
 This repository uses:
+
 - GitHub Projects
 - Engineering milestones
 - Issue tracking
 - Observability roadmap management
 
 Project workflow includes:
-- telemetry infrastructure
-- embedded integration
+
+- Telemetry infrastructure
+- Embedded integration
 - AI diagnostic systems
-- frontend/backend evolution
-- observability engineering
+- Frontend/backend evolution
+- Observability engineering
 
 ---
 
@@ -321,16 +344,25 @@ real-time-systems
 
 # Author
 
-**Hendy Wabede**
+## NANGNDI Wabede
 
-Embedded Systems • AI Diagnostics • Telemetry Engineering • Intelligent Electronic Systems
+Embedded Systems • AI-Assisted Diagnostics • Telemetry Engineering • Intelligent Electronic Systems
+
+GitHub:
+https://github.com/HendyWab
+
+LinkedIn:
+https://www.linkedin.com/in/nangndi-wabede-292318272
 
 ---
 
 # License
 
-This project is intended for:
-- research
-- engineering experimentation
-- educational purposes
-- embedded observability development
+This project is licensed under the MIT License.
+
+The platform is intended for:
+
+- Research
+- Engineering experimentation
+- Educational purposes
+- Embedded observability development
