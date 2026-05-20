@@ -1,20 +1,20 @@
 # =========================================================
 #
 # Intelligent Embedded Diagnostic System (IEDS)
-# MQTT Telemetry Client
+# Multi-Device MQTT Telemetry Client
 #
 # File: mqtt_client.py
 #
 # Description:
-# Handles MQTT telemetry ingestion for the
-# Intelligent Embedded Diagnostic System.
+# Handles distributed telemetry ingestion
+# from multiple embedded devices.
 #
 # Features:
-# - MQTT broker connection
-# - Telemetry topic subscription
-# - Real-time telemetry reception
-# - SQLite telemetry persistence
-# - WebSocket telemetry broadcasting
+# - Wildcard MQTT subscriptions
+# - Multi-device telemetry ingestion
+# - SQLite persistence
+# - Real-time WebSocket broadcasting
+# - Device registry support
 # - Fault-tolerant MQTT initialization
 #
 # =========================================================
@@ -51,16 +51,18 @@ MQTT_BROKER = "localhost"
 
 MQTT_PORT = 1883
 
-MQTT_TOPIC = "ieds/telemetry"
+MQTT_TOPIC = "ieds/devices/+/telemetry"
 
 
 # =========================================================
-# MQTT CONNECTION CALLBACK
+# ACTIVE DEVICE REGISTRY
 # =========================================================
-#
-# Triggered when MQTT client successfully
-# connects to the broker.
-#
+
+active_devices = set()
+
+
+# =========================================================
+# MQTT CONNECT CALLBACK
 # =========================================================
 
 def on_connect(
@@ -87,16 +89,6 @@ def on_connect(
 # =========================================================
 # MQTT MESSAGE CALLBACK
 # =========================================================
-#
-# Triggered when telemetry is received
-# from MQTT broker.
-#
-# Responsibilities:
-# - Decode telemetry payload
-# - Persist telemetry to SQLite
-# - Broadcast telemetry to WebSocket clients
-#
-# =========================================================
 
 def on_message(
     client,
@@ -106,16 +98,20 @@ def on_message(
 
     try:
 
-        # =============================================
-        # DECODE PAYLOAD
-        # =============================================
-
         payload = json.loads(
             msg.payload.decode()
         )
 
+        device_id = payload[
+            "device_id"
+        ]
+
+        active_devices.add(
+            device_id
+        )
+
         print(
-            "MQTT telemetry received:",
+            f"[{device_id}] MQTT telemetry received:",
             payload
         )
 
@@ -152,27 +148,29 @@ def on_message(
 
         db.close()
 
-        print(
-            "Telemetry persisted to SQLite."
-        )
-
 
         # =============================================
         # WEBSOCKET BROADCAST
         # =============================================
 
-        asyncio.run(
-            manager.broadcast(payload)
-        )
+        websocket_payload = {
 
-        print(
-            "Telemetry broadcasted to WebSocket clients."
+            **payload,
+
+            "registered_devices":
+            len(active_devices)
+        }
+
+        asyncio.run(
+            manager.broadcast(
+                websocket_payload
+            )
         )
 
     except Exception as error:
 
         print(
-            "MQTT message processing error:",
+            "MQTT processing error:",
             error
         )
 
@@ -191,31 +189,14 @@ client.on_message = on_message
 # =========================================================
 # START MQTT CLIENT
 # =========================================================
-#
-# Initializes MQTT connection.
-#
-# Fault tolerant:
-# Backend continues running even if
-# MQTT broker unavailable.
-#
-# Useful for:
-# - CI/CD
-# - GitHub Actions
-# - deployment environments
-# - development without broker
-#
-# =========================================================
 
 def start_mqtt():
 
     try:
 
         client.connect(
-
             MQTT_BROKER,
-
             MQTT_PORT,
-
             60
         )
 

@@ -1,24 +1,47 @@
-const WEBSOCKET_URL =
-    "ws://localhost:8000/ws/telemetry";
+// =========================================================
+//
+// Intelligent Embedded Diagnostic System (IEDS)
+// WebSocket Service
+//
+// File: websocket.js
+//
+// Description:
+// Handles frontend WebSocket communication
+// with FastAPI backend.
+//
+// Features:
+// - Real-time telemetry streaming
+// - WebSocket connection management
+// - Automatic telemetry reception
+// - Connection state callbacks
+//
+// =========================================================
 
-let socket = null;
 
-
-// =========================================
-// CONNECT
-// =========================================
+/* ========================================================
+ * CONNECT WEBSOCKET
+ * ====================================================== */
 
 export function connectWebSocket(
-    onMessage
+    onMessage,
+    onConnect,
+    onDisconnect
 )
 {
-    socket = new WebSocket(
-        WEBSOCKET_URL
-    );
 
-    // -------------------------------------
-    // OPEN
-    // -------------------------------------
+    /* ====================================================
+     * CREATE SOCKET
+     * ================================================== */
+
+    const socket =
+        new WebSocket(
+            "ws://localhost:8000/ws/telemetry"
+        );
+
+
+    /* ====================================================
+     * ON OPEN
+     * ================================================== */
 
     socket.onopen = () =>
     {
@@ -26,39 +49,37 @@ export function connectWebSocket(
             "WebSocket connected"
         );
 
-        // keep-alive ping
-
-        setInterval(() =>
+        if(onConnect)
         {
-            if (
-                socket.readyState === 1
-            )
-            {
-                socket.send("ping");
-            }
-
-        }, 5000);
+            onConnect();
+        }
     };
 
-    // -------------------------------------
-    // RECEIVE
-    // -------------------------------------
 
-    socket.onmessage = (
-        event
-    ) =>
+    /* ====================================================
+     * ON MESSAGE
+     * ================================================== */
+
+    socket.onmessage = (event) =>
     {
+
         const data =
             JSON.parse(
                 event.data
             );
 
+        console.log(
+            "WebSocket telemetry:",
+            data
+        );
+
         onMessage(data);
     };
 
-    // -------------------------------------
-    // CLOSE
-    // -------------------------------------
+
+    /* ====================================================
+     * ON CLOSE
+     * ================================================== */
 
     socket.onclose = () =>
     {
@@ -66,28 +87,29 @@ export function connectWebSocket(
             "WebSocket disconnected"
         );
 
-        // auto reconnect
-
-        setTimeout(() =>
+        if(onDisconnect)
         {
-            connectWebSocket(
-                onMessage
-            );
-
-        }, 3000);
+            onDisconnect();
+        }
     };
 
-    // -------------------------------------
-    // ERROR
-    // -------------------------------------
 
-    socket.onerror = (
-        error
-    ) =>
+    /* ====================================================
+     * ON ERROR
+     * ================================================== */
+
+    socket.onerror = (error) =>
     {
         console.error(
             "WebSocket error:",
             error
         );
     };
+
+
+    /* ====================================================
+     * RETURN SOCKET
+     * ================================================== */
+
+    return socket;
 }
