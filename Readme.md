@@ -343,18 +343,17 @@ real-time-systems
 
 ---
 
+# 👨‍💻 Author
 
-# Author
-
-## NANGNDI Wabede
-
-Embedded Systems • AI-Assisted Diagnostics • Telemetry Engineering • Intelligent Electronic Systems
+<p align="center">
+  <img src="assets/author-banner.png" width="100%" />
+</p>
 
 <div align="center">
 
-<a href="https://linkedin.com/in/nangndi-wabede-292318272">
-  <img src="https://skillicons.dev/icons?i=linkedin" height="55"/>
-</a>
+### Nangndi Wabede
+
+Embedded AI Engineer • Full-Stack Developer • IoT & Cloud Architect
 
 </div>
 
