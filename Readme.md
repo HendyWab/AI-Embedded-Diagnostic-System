@@ -349,13 +349,15 @@ real-time-systems
   <img src="assets/author-banner.png" width="100%" />
 </p>
 
+
+
 <div align="center">
 
-### Nangndi Wabede
-
-Embedded AI Engineer • Full-Stack Developer • IoT & Cloud Architect
+### Embedded AI Engineer • Full-Stack Developer • IoT & Cloud Architect
 
 </div>
+
+
 
 ---
 
