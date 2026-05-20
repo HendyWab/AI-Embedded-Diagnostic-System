@@ -1,62 +1,51 @@
-# ==============================================================
-#
-#  Intelligent Embedded Diagnostic System (IEDS)
-#  Telemetry Simulator
-#
-#  File: telemetry_simulator.py
-#
-#  Description:
-#  Simulates embedded telemetry generation and continuously
-#  pushes telemetry payloads to the FastAPI backend.
-#
-# ==============================================================
+import json
+
+import random
 
 import time
-import random
-import requests
 
-# ==============================================================
-#                      CONFIGURATION
-# ==============================================================
+from datetime import datetime
 
-BACKEND_URL = \
-    "http://127.0.0.1:8000/telemetry/"
+import paho.mqtt.client as mqtt
 
-DEVICE_ID = "IEDS-001"
+MQTT_BROKER = "localhost"
 
-FIRMWARE_VERSION = "v0.1.0"
+MQTT_PORT = 1883
 
-# ==============================================================
-#                      HELPER FUNCTIONS
-# ==============================================================
+MQTT_TOPIC = "ieds/telemetry"
 
-def generate_telemetry_payload():
-    """
-    Generates simulated telemetry payload.
-    """
+client = mqtt.Client()
+
+client.connect(
+    MQTT_BROKER,
+    MQTT_PORT,
+    60
+)
+
+print(
+    "Telemetry simulator started..."
+)
+
+while True:
 
     anomaly_score = round(
-        random.uniform(0.05, 0.98),
+        random.uniform(0.0, 1.0),
         2
     )
 
     signal_quality = round(
-        random.uniform(75.0, 100.0),
+        random.uniform(75.0, 99.0),
         2
     )
 
-    emi_detected = anomaly_score > 0.7
+    emi_detected = (
+        anomaly_score > 0.7
+    )
 
-    payload = {
-
-        "timestamp":
-        int(time.time()),
+    telemetry = {
 
         "device_id":
-        DEVICE_ID,
-
-        "firmware_version":
-        FIRMWARE_VERSION,
+        "IEDS-001",
 
         "anomaly_score":
         anomaly_score,
@@ -67,78 +56,18 @@ def generate_telemetry_payload():
         "emi_detected":
         emi_detected,
 
-        "topk_predictions":
-        [
-            {
-                "fault_class":
-                "EMI_INTERFERENCE",
-
-                "confidence":
-                round(
-                    random.uniform(0.70, 0.99),
-                    2
-                )
-            },
-
-            {
-                "fault_class":
-                "POWER_FAULT",
-
-                "confidence":
-                round(
-                    random.uniform(0.01, 0.20),
-                    2
-                )
-            }
-        ]
+        "timestamp":
+        datetime.now().isoformat()
     }
 
-    return payload
-
-# ==============================================================
-#                      MAIN LOOP
-# ==============================================================
-
-def main():
-    """
-    Continuously sends telemetry.
-    """
-
-    print(
-        "\n[IEDS] Telemetry simulator started.\n"
+    client.publish(
+        MQTT_TOPIC,
+        json.dumps(telemetry)
     )
 
-    while True:
+    print(
+        "Published:",
+        telemetry
+    )
 
-        payload = \
-            generate_telemetry_payload()
-
-        try:
-
-            response = requests.post(
-                BACKEND_URL,
-                json=payload
-            )
-
-            print(
-                "[Telemetry Sent]",
-                response.status_code,
-                payload
-            )
-
-        except Exception as error:
-
-            print(
-                "[Telemetry Error]",
-                error
-            )
-
-        time.sleep(3)
-
-# ==============================================================
-#                      ENTRY POINT
-# ==============================================================
-
-if __name__ == "__main__":
-
-    main()
+    time.sleep(3)
