@@ -1,13 +1,13 @@
 """
 ===========================================
-DEVICE HEALTH CLASSIFIER
+DEVICE HEALTH Analyzer
 ===========================================
 
 This module evaluates embedded device
 health based on signal integrity and
 EMI detection state.
 
-Author: Nangndi Wabede
+Author: HendyWab
 Project: Intelligent Embedded Diagnostic System
 """
 

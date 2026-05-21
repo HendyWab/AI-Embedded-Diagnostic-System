@@ -9,7 +9,9 @@
 # Initializes the FastAPI backend application,
 # configures middleware, database initialization,
 # MQTT telemetry ingestion, WebSocket routing,
-# and REST telemetry endpoints.
+# AI diagnostics integration, and REST endpoints.
+#
+# Author: HendyWab
 #
 # =========================================================
 
@@ -49,6 +51,10 @@ from backend.routes.telemetry import (
 
 from backend.routes.websocket import (
     router as websocket_router
+)
+
+from backend.routes.ai_routes import (
+    router as ai_router
 )
 
 
@@ -98,7 +104,6 @@ app = FastAPI(
 # =========================================================
 #
 # Allows frontend applications
-# (React/Vite dashboard)
 # to communicate with the backend.
 #
 # =========================================================
@@ -121,10 +126,7 @@ app.add_middleware(
 # MQTT INITIALIZATION
 # =========================================================
 #
-# Starts MQTT telemetry subscriber.
-#
-# Backend listens for incoming telemetry
-# published by embedded devices or simulators.
+# Starts telemetry MQTT subscriber.
 #
 # =========================================================
 
@@ -132,7 +134,7 @@ start_mqtt()
 
 
 # =========================================================
-# API ROUTES
+# API ROUTE REGISTRATION
 # =========================================================
 
 app.include_router(
@@ -143,12 +145,16 @@ app.include_router(
     websocket_router
 )
 
+app.include_router(
+    ai_router
+)
+
 
 # =========================================================
 # ROOT ENDPOINT
 # =========================================================
 #
-# Simple backend health/status endpoint.
+# Backend operational status endpoint.
 #
 # =========================================================
 
@@ -168,7 +174,10 @@ async def root():
         "active",
 
         "mqtt":
-        "connected"
+        "connected",
+
+        "ai_engine":
+        "initialized"
     }
 
 
@@ -178,8 +187,7 @@ async def root():
 #
 # Useful for monitoring,
 # deployment validation,
-# Docker healthchecks later,
-# and observability infrastructure.
+# and future observability infrastructure.
 #
 # =========================================================
 
@@ -199,5 +207,36 @@ async def health_check():
         "active",
 
         "mqtt":
-        "running"
+        "running",
+
+        "ai_engine":
+        "operational"
+    }
+
+
+# =========================================================
+# AI STATUS ENDPOINT
+# =========================================================
+#
+# AI diagnostics system status endpoint.
+#
+# =========================================================
+
+@app.get("/ai/status")
+
+async def ai_status():
+
+    return {
+
+        "ai_engine":
+        "online",
+
+        "feature_extraction":
+        "enabled",
+
+        "health_scoring":
+        "enabled",
+
+        "anomaly_detection":
+        "active"
     }
