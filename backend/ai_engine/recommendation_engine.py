@@ -3,25 +3,29 @@
 AI RECOMMENDATION ENGINE
 ===========================================
 
-This module generates intelligent
-maintenance and diagnostic recommendations
+This module generates AI-assisted
+diagnostic interpretations and
+infrastructure recommendations
 based on telemetry conditions.
 
-Author: Nangndi Wabede
+Author: HendyWab
 Project: Intelligent Embedded Diagnostic System
 """
 
 # =========================================
-# AI RECOMMENDATION GENERATOR
+# RECOMMENDATION ENGINE
 # =========================================
 
-def generate_recommendation(
+def generate_recommendations(
     anomaly_level: str,
     emi_detected: bool,
-    signal_quality: float
+    signal_quality: float,
+    variance: float,
+    stability_score: float
 ):
     """
-    Generate intelligent recommendation.
+    Generate intelligent diagnostics
+    and infrastructure recommendations.
 
     Parameters:
     -----------
@@ -34,39 +38,177 @@ def generate_recommendation(
     signal_quality : float
         Current signal integrity quality
 
+    variance : float
+        Signal variance level
+
+    stability_score : float
+        Signal stability metric
+
     Returns:
     --------
-    str
-        Diagnostic recommendation
+    dict
+        Structured diagnostic intelligence
     """
 
-    # Severe anomaly state
+    # =====================================
+    # DIAGNOSTIC CONTAINERS
+    # =====================================
+
+    diagnosis = []
+
+    recommendations = []
+
+    # =====================================
+    # CRITICAL ANOMALY ANALYSIS
+    # =====================================
+
     if anomaly_level == "CRITICAL":
-        return (
-            "Immediate inspection required. "
-            "Severe telemetry instability detected."
+
+        diagnosis.append(
+            "Critical telemetry instability detected"
         )
 
-    # High anomaly risk
-    if anomaly_level == "HIGH":
-        return (
-            "Inspect EMI shielding and "
-            "power filtering integrity."
+        recommendations.append(
+            "Perform immediate embedded system inspection"
         )
 
-    # EMI warning state
+        recommendations.append(
+            "Inspect grounding integrity"
+        )
+
+        recommendations.append(
+            "Validate power regulation stability"
+        )
+
+    # =====================================
+    # HIGH ANOMALY ANALYSIS
+    # =====================================
+
+    elif anomaly_level == "HIGH":
+
+        diagnosis.append(
+            "High anomaly probability detected"
+        )
+
+        recommendations.append(
+            "Inspect EMI shielding integrity"
+        )
+
+        recommendations.append(
+            "Verify DC-DC filtering stage"
+        )
+
+        recommendations.append(
+            "Check signal isolation paths"
+        )
+
+    # =====================================
+    # EMI DIAGNOSTICS
+    # =====================================
+
     if emi_detected:
-        return (
-            "Monitor EMI sources near "
-            "embedded system."
+
+        diagnosis.append(
+            "Electromagnetic interference detected"
         )
 
-    # Signal degradation
+        recommendations.append(
+            "Inspect nearby EMI sources"
+        )
+
+        recommendations.append(
+            "Validate shielding continuity"
+        )
+
+        recommendations.append(
+            "Reduce high-frequency interference exposure"
+        )
+
+    # =====================================
+    # SIGNAL QUALITY ANALYSIS
+    # =====================================
+
     if signal_quality < 75:
-        return (
-            "Signal quality degradation detected. "
-            "Verify communication layer."
+
+        diagnosis.append(
+            "Signal quality degradation detected"
         )
 
-    # Stable operational state
-    return "System operating normally."
+        recommendations.append(
+            "Verify communication interface stability"
+        )
+
+        recommendations.append(
+            "Inspect telemetry transmission layer"
+        )
+
+    # =====================================
+    # HIGH VARIANCE ANALYSIS
+    # =====================================
+
+    if variance > 1000:
+
+        diagnosis.append(
+            "High signal variance detected"
+        )
+
+        recommendations.append(
+            "Inspect analog filtering stage"
+        )
+
+        recommendations.append(
+            "Validate sensor stability"
+        )
+
+    # =====================================
+    # STABILITY ANALYSIS
+    # =====================================
+
+    if stability_score < 50:
+
+        diagnosis.append(
+            "Low signal stability detected"
+        )
+
+        recommendations.append(
+            "Inspect embedded timing consistency"
+        )
+
+        recommendations.append(
+            "Analyze transient signal disturbances"
+        )
+
+    # =====================================
+    # NORMAL OPERATION
+    # =====================================
+
+    if not diagnosis:
+
+        diagnosis.append(
+            "System operating normally"
+        )
+
+        recommendations.append(
+            "Continue telemetry monitoring"
+        )
+
+    # =====================================
+    # REMOVE DUPLICATES
+    # =====================================
+
+    diagnosis = list(set(diagnosis))
+
+    recommendations = list(set(recommendations))
+
+    # =====================================
+    # RETURN STRUCTURED RESPONSE
+    # =====================================
+
+    return {
+
+        "diagnosis":
+        diagnosis,
+
+        "recommendations":
+        recommendations
+    }

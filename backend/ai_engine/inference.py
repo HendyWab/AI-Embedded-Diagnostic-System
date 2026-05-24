@@ -4,32 +4,63 @@ AI INFERENCE ENGINE
 IEDS - Intelligent Embedded Diagnostic System
 ===========================================================
 
-Central AI processing pipeline.
+Central AI-assisted telemetry diagnostics
+and observability inference pipeline.
 
 Author: HendyWab
 ===========================================================
 """
 
-from backend.ai_engine.feature_extractor import FeatureExtractor
-from backend.ai_engine.health_score import HealthScoreEngine
+# =========================================================
+# AI ENGINE IMPORTS
+# =========================================================
 
+from backend.ai_engine.feature_extractor import (
+    FeatureExtractor
+)
+
+from backend.ai_engine.health_score import (
+    HealthScoreEngine
+)
+
+from backend.ai_engine.health_analyzer import (
+    classify_health
+)
+
+from backend.ai_engine.recommendation_engine import (
+    generate_recommendations
+)
+
+
+# =========================================================
+# AI INFERENCE ENGINE
+# =========================================================
 
 class AIInferenceEngine:
 
     """
     =======================================================
-    Main AI Engine
+    Main AI Diagnostics Pipeline
     =======================================================
 
     Pipeline:
-        Raw Signal
-            ↓
+
+        Raw Telemetry Signal
+                ↓
         Feature Extraction
-            ↓
+                ↓
+        Health Scoring
+                ↓
         Health Analysis
-            ↓
-        Diagnostics Output
+                ↓
+        Recommendation Engine
+                ↓
+        Structured Diagnostics Output
     """
+
+    # =====================================================
+    # INITIALIZE AI MODULES
+    # =====================================================
 
     def __init__(self):
 
@@ -37,42 +68,115 @@ class AIInferenceEngine:
 
         self.health_engine = HealthScoreEngine()
 
-    # =======================================================
-    # RUN COMPLETE AI ANALYSIS
-    # =======================================================
+    # =====================================================
+    # COMPLETE AI ANALYSIS PIPELINE
+    # =====================================================
+
     def analyze_signal(self, signal):
 
         """
-        Complete telemetry AI pipeline.
+        Execute complete telemetry
+        AI inference workflow.
         """
 
-        # ===================================================
-        # EXTRACT FEATURES
-        # ===================================================
+        # =================================================
+        # FEATURE EXTRACTION
+        # =================================================
 
-        features = self.extractor.extract_features(signal)
+        features = self.extractor.extract_features(
+            signal
+        )
 
-        # ===================================================
-        # COMPUTE HEALTH
-        # ===================================================
+        # =================================================
+        # HEALTH SCORING
+        # =================================================
 
-        health = self.health_engine.compute_health(features)
+        health = self.health_engine.compute_health(
+            features
+        )
 
-        # ===================================================
-        # DETERMINE ANOMALY
-        # ===================================================
+        # =================================================
+        # DETERMINE EMI CONDITION
+        # =================================================
 
-        anomaly_detected = health["health_score"] < 70
+        emi_detected = (
+            health["health_score"] < 70
+        )
 
-        # ===================================================
-        # RETURN COMPLETE AI RESULT
-        # ===================================================
+        # =================================================
+        # HEALTH ANALYSIS
+        # =================================================
+
+        analysis = classify_health(
+
+            signal_quality=
+            health["health_score"],
+
+            emi_detected=
+            emi_detected,
+
+            variance=
+            features["variance"],
+
+            stability_score=
+            features["stability_score"]
+        )
+
+        # =================================================
+        # GENERATE RECOMMENDATIONS
+        # =================================================
+
+        diagnostics = generate_recommendations(
+
+            anomaly_level=
+            analysis["status"],
+
+            emi_detected=
+            emi_detected,
+
+            signal_quality=
+            health["health_score"],
+
+            variance=
+            features["variance"],
+
+            stability_score=
+            features["stability_score"]
+        )
+
+        # =================================================
+        # GLOBAL ANOMALY STATE
+        # =================================================
+
+        anomaly_detected = (
+
+            analysis["status"]
+            in [
+
+                "CRITICAL",
+                "WARNING",
+                "DEGRADED"
+            ]
+        )
+
+        # =================================================
+        # STRUCTURED AI RESPONSE
+        # =================================================
 
         return {
 
-            "features": features,
+            "features":
+            features,
 
-            "health": health,
+            "health":
+            health,
 
-            "anomaly_detected": anomaly_detected
+            "analysis":
+            analysis,
+
+            "diagnostics":
+            diagnostics,
+
+            "anomaly_detected":
+            anomaly_detected
         }

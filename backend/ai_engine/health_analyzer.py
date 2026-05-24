@@ -1,11 +1,12 @@
 """
 ===========================================
-DEVICE HEALTH Analyzer
+DEVICE HEALTH ANALYZER
 ===========================================
 
 This module evaluates embedded device
-health based on signal integrity and
-EMI detection state.
+health based on signal integrity,
+telemetry stability, and EMI anomaly
+conditions.
 
 Author: HendyWab
 Project: Intelligent Embedded Diagnostic System
@@ -15,10 +16,14 @@ Project: Intelligent Embedded Diagnostic System
 # DEVICE HEALTH CLASSIFICATION
 # =========================================
 
-def classify_health(signal_quality: float,
-                    emi_detected: bool):
+def classify_health(
+    signal_quality: float,
+    emi_detected: bool,
+    variance: float,
+    stability_score: float
+):
     """
-    Determine overall embedded system health.
+    Analyze embedded system health state.
 
     Parameters:
     -----------
@@ -28,28 +33,126 @@ def classify_health(signal_quality: float,
     emi_detected : bool
         EMI anomaly detection flag
 
+    variance : float
+        Signal variance metric
+
+    stability_score : float
+        Signal stability evaluation
+
     Returns:
     --------
-    str
-        EXCELLENT / GOOD / WARNING /
-        DEGRADED / CRITICAL
+    dict
+        Structured health analysis
     """
 
-    # Severe condition
-    if emi_detected and signal_quality < 80:
-        return "CRITICAL"
+    # =====================================
+    # DEFAULT RESPONSE
+    # =====================================
 
-    # EMI present but still operational
-    if emi_detected:
-        return "WARNING"
+    status = "GOOD"
 
-    # High-quality signal integrity
-    if signal_quality >= 90:
-        return "EXCELLENT"
+    severity = "LOW"
 
-    # Stable operational state
-    if signal_quality >= 75:
-        return "GOOD"
+    risk_level = "LOW"
 
-    # Weak communication quality
-    return "DEGRADED"
+    confidence = 0.75
+
+    # =====================================
+    # CRITICAL HEALTH CONDITION
+    # =====================================
+
+    if (
+        emi_detected and
+        signal_quality < 75 and
+        variance > 1000
+    ):
+
+        status = "CRITICAL"
+
+        severity = "HIGH"
+
+        risk_level = "CRITICAL"
+
+        confidence = 0.95
+
+    # =====================================
+    # WARNING STATE
+    # =====================================
+
+    elif (
+        emi_detected or
+        variance > 700 or
+        stability_score < 50
+    ):
+
+        status = "WARNING"
+
+        severity = "MEDIUM"
+
+        risk_level = "MODERATE"
+
+        confidence = 0.82
+
+    # =====================================
+    # EXCELLENT CONDITION
+    # =====================================
+
+    elif (
+        signal_quality >= 90 and
+        stability_score >= 80
+    ):
+
+        status = "EXCELLENT"
+
+        severity = "MINIMAL"
+
+        risk_level = "LOW"
+
+        confidence = 0.98
+
+    # =====================================
+    # STABLE OPERATION
+    # =====================================
+
+    elif signal_quality >= 75:
+
+        status = "GOOD"
+
+        severity = "LOW"
+
+        risk_level = "LOW"
+
+        confidence = 0.88
+
+    # =====================================
+    # DEGRADED STATE
+    # =====================================
+
+    else:
+
+        status = "DEGRADED"
+
+        severity = "MEDIUM"
+
+        risk_level = "ELEVATED"
+
+        confidence = 0.80
+
+    # =====================================
+    # STRUCTURED RESPONSE
+    # =====================================
+
+    return {
+
+        "status":
+        status,
+
+        "severity":
+        severity,
+
+        "risk_level":
+        risk_level,
+
+        "confidence":
+        confidence
+    }
