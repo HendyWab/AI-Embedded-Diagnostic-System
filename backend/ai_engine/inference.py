@@ -10,8 +10,8 @@ Author: HendyWab
 ===========================================================
 """
 
-from ai_engine.feature_extractor import FeatureExtractor
-from ai_engine.health_score import HealthScoreEngine
+from backend.ai_engine.feature_extractor import FeatureExtractor
+from backend.ai_engine.health_score import HealthScoreEngine
 
 
 class AIInferenceEngine:
