@@ -14,7 +14,7 @@ Author: HendyWab
 """
 
 from fastapi import APIRouter
-from ai_engine.inference import AIInferenceEngine
+from backend.ai_engine.inference import AIInferenceEngine
 
 router = APIRouter()
 
