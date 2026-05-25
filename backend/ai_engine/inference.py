@@ -172,6 +172,10 @@ class AIInferenceEngine:
         # FINAL AI RESPONSE
         # ===================================================
 
+                # ===================================================
+        # FINAL AI RESPONSE
+        # ===================================================
+
         return {
 
             "features": features,
@@ -180,9 +184,39 @@ class AIInferenceEngine:
 
             "diagnostics": diagnostics,
 
-            "recommendation": recommendation,
-
             "system_state": system_state,
 
-            "anomaly_detected": anomaly_detected
+            "anomaly": {
+
+                "detected": anomaly_detected,
+
+                "severity":
+                    health["risk_level"],
+
+                "confidence":
+                    0.91 if anomaly_detected else 0.12
+            },
+
+            "recommendations": [
+
+                {
+                    "priority": "HIGH",
+                    "action":
+                        "Inspect EMI shielding integrity"
+                }
+
+            ] if anomaly_detected else [
+
+                {
+                    "priority": "LOW",
+                    "action":
+                        "System operating normally"
+                }
+
+            ],
+
+            "recommendation_text":
+                recommendation
         }
+        
+    
