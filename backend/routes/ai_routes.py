@@ -1,43 +1,52 @@
 """
 ===========================================================
-AI API ROUTES
+AI ANALYSIS ROUTES
 IEDS - Intelligent Embedded Diagnostic System
 ===========================================================
 
-Provides:
-    - AI telemetry analysis
-    - signal diagnostics
-    - health scoring
+FastAPI routes for AI telemetry diagnostics.
 
 Author: HendyWab
 ===========================================================
 """
 
 from fastapi import APIRouter
+from pydantic import BaseModel
+
 from backend.ai_engine.inference import AIInferenceEngine
+
+# ===========================================================
+# ROUTER INITIALIZATION
+# ===========================================================
 
 router = APIRouter()
 
+# ===========================================================
+# AI ENGINE INSTANCE
+# ===========================================================
+
 ai_engine = AIInferenceEngine()
 
+# ===========================================================
+# REQUEST MODEL
+# ===========================================================
+
+class SignalRequest(BaseModel):
+
+    signal: list[float]
 
 # ===========================================================
-# AI SIGNAL ANALYSIS ENDPOINT
+# AI ANALYSIS ENDPOINT
 # ===========================================================
-@router.post("/ai/analyze")
 
-async def analyze_signal(payload: dict):
+@router.post("/analyze")
+async def analyze_signal(request: SignalRequest):
 
     """
-    Example Request:
-
-    {
-        "signal": [75, 80, 92, 100, 45, 30]
-    }
+    Analyze telemetry signal using
+    the IEDS AI diagnostics engine.
     """
 
-    signal = payload.get("signal", [])
-
-    result = ai_engine.analyze_signal(signal)
+    result = ai_engine.analyze_signal(request.signal)
 
     return result

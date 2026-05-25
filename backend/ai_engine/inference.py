@@ -4,68 +4,172 @@ AI INFERENCE ENGINE
 IEDS - Intelligent Embedded Diagnostic System
 ===========================================================
 
-Central AI processing pipeline.
+Central AI telemetry diagnostics pipeline.
 
 Author: HendyWab
+Project: Intelligent Embedded Diagnostic System
 ===========================================================
 """
 
 from backend.ai_engine.feature_extractor import FeatureExtractor
-from backend.ai_engine.health_score import HealthScoreEngine
+
+from backend.ai_engine.health_score import (
+    HealthScoreEngine
+)
+
+from backend.ai_engine.recommendation_engine import (
+    generate_recommendation
+)
 
 
 class AIInferenceEngine:
 
     """
     =======================================================
-    Main AI Engine
+    MAIN AI DIAGNOSTICS ENGINE
     =======================================================
 
     Pipeline:
+
         Raw Signal
             ↓
         Feature Extraction
             ↓
         Health Analysis
             ↓
-        Diagnostics Output
+        Diagnostics Inference
+            ↓
+        Recommendation Generation
+            ↓
+        Final AI Result
+    =======================================================
     """
 
     def __init__(self):
 
+        # ===================================================
+        # FEATURE EXTRACTION ENGINE
+        # ===================================================
+
         self.extractor = FeatureExtractor()
+
+        # ===================================================
+        # HEALTH SCORING ENGINE
+        # ===================================================
 
         self.health_engine = HealthScoreEngine()
 
     # =======================================================
-    # RUN COMPLETE AI ANALYSIS
+    # MAIN AI ANALYSIS PIPELINE
     # =======================================================
+
     def analyze_signal(self, signal):
 
         """
-        Complete telemetry AI pipeline.
+        Analyze telemetry signal using the
+        IEDS AI diagnostics pipeline.
         """
 
         # ===================================================
-        # EXTRACT FEATURES
+        # FEATURE EXTRACTION
         # ===================================================
 
         features = self.extractor.extract_features(signal)
 
         # ===================================================
-        # COMPUTE HEALTH
+        # HEALTH ANALYSIS
         # ===================================================
 
         health = self.health_engine.compute_health(features)
 
         # ===================================================
-        # DETERMINE ANOMALY
+        # ANOMALY DETECTION
         # ===================================================
 
-        anomaly_detected = health["health_score"] < 70
+        anomaly_detected = (
+            health["health_score"] < 70
+        )
 
         # ===================================================
-        # RETURN COMPLETE AI RESULT
+        # EMI RISK ANALYSIS
+        # ===================================================
+
+        emi_risk = (
+            features["spike_count"] > 3
+        )
+
+        # ===================================================
+        # SIGNAL STABILITY
+        # ===================================================
+
+        signal_quality = (
+            features["stability_score"]
+        )
+
+        # ===================================================
+        # AI RECOMMENDATION ENGINE
+        # ===================================================
+
+        recommendation = generate_recommendation(
+
+            anomaly_level=health["risk_level"],
+
+            emi_detected=emi_risk,
+
+            signal_quality=signal_quality
+        )
+
+        # ===================================================
+        # SYSTEM OPERATIONAL STATE
+        # ===================================================
+
+        system_state = {
+
+            "operational":
+
+                health["health_score"] >= 70,
+
+            "maintenance_required":
+
+                health["risk_level"]
+                in ["HIGH", "CRITICAL"],
+
+            "emi_risk":
+
+                emi_risk
+        }
+
+        # ===================================================
+        # DIAGNOSTICS SUMMARY
+        # ===================================================
+
+        diagnostics = {
+
+            "severity":
+
+                health["risk_level"],
+
+            "status":
+
+                health["status"],
+
+            "confidence_score":
+
+                max(
+                    0,
+                    min(
+                        100,
+                        health["health_score"]
+                    )
+                ),
+
+            "signal_quality":
+
+                signal_quality
+        }
+
+        # ===================================================
+        # FINAL AI RESPONSE
         # ===================================================
 
         return {
@@ -73,6 +177,12 @@ class AIInferenceEngine:
             "features": features,
 
             "health": health,
+
+            "diagnostics": diagnostics,
+
+            "recommendation": recommendation,
+
+            "system_state": system_state,
 
             "anomaly_detected": anomaly_detected
         }
