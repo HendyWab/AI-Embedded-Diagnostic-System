@@ -1,19 +1,23 @@
 """
 ===========================================================
-AI ANALYSIS ROUTES
+AI ROUTES
 IEDS - Intelligent Embedded Diagnostic System
 ===========================================================
 
-FastAPI routes for AI telemetry diagnostics.
+AI diagnostics API routes.
 
 Author: HendyWab
 ===========================================================
 """
 
 from fastapi import APIRouter
+
 from pydantic import BaseModel
 
 from backend.ai_engine.inference import AIInferenceEngine
+
+from backend.services.device_registry import DeviceRegistry
+
 
 # ===========================================================
 # ROUTER INITIALIZATION
@@ -21,11 +25,20 @@ from backend.ai_engine.inference import AIInferenceEngine
 
 router = APIRouter()
 
+
 # ===========================================================
 # AI ENGINE INSTANCE
 # ===========================================================
 
 ai_engine = AIInferenceEngine()
+
+
+# ===========================================================
+# DEVICE REGISTRY INSTANCE
+# ===========================================================
+
+registry = DeviceRegistry()
+
 
 # ===========================================================
 # REQUEST MODEL
@@ -33,20 +46,92 @@ ai_engine = AIInferenceEngine()
 
 class SignalRequest(BaseModel):
 
+    device_id: str
+
     signal: list[float]
 
+
 # ===========================================================
-# AI ANALYSIS ENDPOINT
+# ANALYZE SIGNAL
 # ===========================================================
 
 @router.post("/analyze")
-async def analyze_signal(request: SignalRequest):
+
+def analyze_signal(payload: SignalRequest):
 
     """
     Analyze telemetry signal using
-    the IEDS AI diagnostics engine.
+    IEDS AI diagnostics engine.
     """
 
-    result = ai_engine.analyze_signal(request.signal)
+    # =======================================================
+    # RUN AI ANALYSIS
+    # =======================================================
 
-    return result
+    result = ai_engine.analyze_signal(
+        payload.signal
+    )
+
+    # =======================================================
+    # REGISTER DEVICE STATE
+    # =======================================================
+
+    registry.update_device(
+        payload.device_id,
+        result
+    )
+
+    # =======================================================
+    # RETURN STRUCTURED RESPONSE
+    # =======================================================
+
+    return {
+
+        "device_id": payload.device_id,
+
+        "diagnostics": result
+    }
+
+
+# ===========================================================
+# GET ALL REGISTERED DEVICES
+# ===========================================================
+
+@router.get("/devices")
+
+def get_devices():
+
+    """
+    Return all monitored devices.
+    """
+
+    return {
+
+        "registered_devices":
+            registry.get_all_devices()
+    }
+
+
+# ===========================================================
+# GET SINGLE DEVICE
+# ===========================================================
+
+@router.get("/devices/{device_id}")
+
+def get_device(device_id: str):
+
+    """
+    Return specific device state.
+    """
+
+    device = registry.get_device(device_id)
+
+    if not device:
+
+        return {
+
+            "error":
+                "Device not found"
+        }
+
+    return device
