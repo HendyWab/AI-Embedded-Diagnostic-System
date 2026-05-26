@@ -3,19 +3,20 @@
 // Intelligent Embedded Diagnostic System (IEDS)
 // Fleet Observability Dashboard
 //
-// File: App.jsx
+// Author: HendyWab
 //
 // Description:
-// Main frontend dashboard for the Intelligent
-// Embedded Diagnostic System.
+// Main real-time frontend dashboard
+// for distributed telemetry monitoring.
 //
 // Features:
-// - Multi-device observability
-// - Real-time telemetry streaming
-// - Fleet monitoring
+// - Live WebSocket telemetry
+// - Fleet observability
 // - EMI anomaly visualization
-// - Live WebSocket telemetry updates
-// - Device health monitoring
+// - Device monitoring
+// - Real-time analytics
+// - Fleet statistics
+// - Activity feed
 //
 // =========================================================
 
@@ -36,8 +37,23 @@ from "react";
  * COMPONENT IMPORTS
  * ====================================================== */
 
+import TelemetryCard
+from "./components/TelemetryCard";
+
+import DeviceStatusCard
+from "./components/DeviceStatusCard";
+
 import TelemetryChart
 from "./components/TelemetryChart";
+
+import FleetStatCard
+from "./components/FleetStatCard";
+
+import FleetDeviceCard
+from "./components/FleetDeviceCard";
+
+import ActivityFeed
+from "./components/ActivityFeed";
 
 
 /* ========================================================
@@ -59,58 +75,44 @@ import "./App.css";
 
 
 /* ========================================================
- * MAIN APP COMPONENT
+ * MAIN APP
  * ====================================================== */
 
 function App()
 {
 
     /* ====================================================
-     * STATE MANAGEMENT
+     * STATES
      * ================================================== */
-
-    /*
-     * Latest telemetry payload.
-     */
 
     const [
         telemetry,
         setTelemetry
     ] = useState(null);
 
-
-    /*
-     * Telemetry history buffer.
-     */
-
     const [
         telemetryHistory,
         setTelemetryHistory
     ] = useState([]);
-
-
-    /*
-     * Active fleet registry.
-     */
 
     const [
         devices,
         setDevices
     ] = useState({});
 
-
-    /*
-     * WebSocket connection status.
-     */
-
     const [
         wsConnected,
         setWsConnected
     ] = useState(false);
 
+    const [
+        activityFeed,
+        setActivityFeed
+    ] = useState([]);
+
 
     /* ====================================================
-     * WEBSOCKET INITIALIZATION
+     * WEBSOCKET INIT
      * ================================================== */
 
     useEffect(() =>
@@ -119,9 +121,9 @@ function App()
         const socket =
             connectWebSocket(
 
-                /*
+                /* ========================================
                  * ON MESSAGE
-                 */
+                 * ====================================== */
 
                 (incomingTelemetry) =>
                 {
@@ -132,18 +134,18 @@ function App()
                     );
 
 
-                    /* ================================
-                     * UPDATE LATEST TELEMETRY
-                     * ============================== */
+                    /* ====================================
+                     * UPDATE CURRENT TELEMETRY
+                     * ================================== */
 
                     setTelemetry(
                         incomingTelemetry
                     );
 
 
-                    /* ================================
-                     * UPDATE CHART HISTORY
-                     * ============================== */
+                    /* ====================================
+                     * UPDATE HISTORY
+                     * ================================== */
 
                     setTelemetryHistory(
                         (prevHistory) =>
@@ -155,18 +157,14 @@ function App()
                                 incomingTelemetry
                             ];
 
-                            /*
-                             * Keep latest 20 points.
-                             */
-
                             return updated.slice(-20);
                         }
                     );
 
 
-                    /* ================================
+                    /* ====================================
                      * UPDATE DEVICE REGISTRY
-                     * ============================== */
+                     * ================================== */
 
                     setDevices(
                         (prevDevices) =>
@@ -182,16 +180,33 @@ function App()
                     );
 
 
-                    setWsConnected(true);
+                    /* ====================================
+                     * UPDATE ACTIVITY FEED
+                     * ================================== */
+
+                    setActivityFeed(
+                        (prevFeed) =>
+                        {
+
+                            const updated =
+                            [
+                                incomingTelemetry,
+                                ...prevFeed
+                            ];
+
+                            return updated.slice(0, 15);
+                        }
+                    );
                 },
 
 
-                /*
+                /* ========================================
                  * ON CONNECT
-                 */
+                 * ====================================== */
 
                 () =>
                 {
+
                     console.log(
                         "WebSocket connected"
                     );
@@ -200,12 +215,13 @@ function App()
                 },
 
 
-                /*
+                /* ========================================
                  * ON DISCONNECT
-                 */
+                 * ====================================== */
 
                 () =>
                 {
+
                     console.log(
                         "WebSocket disconnected"
                     );
@@ -215,9 +231,9 @@ function App()
             );
 
 
-        /*
-         * Cleanup.
-         */
+        /* ================================================
+         * CLEANUP
+         * ============================================== */
 
         return () =>
         {
@@ -236,6 +252,7 @@ function App()
         return (
 
             <div
+
                 style={{
                     color: "white",
                     padding: "40px",
@@ -247,6 +264,55 @@ function App()
             </div>
         );
     }
+
+
+    /* ====================================================
+     * FLEET METRICS
+     * ================================================== */
+
+    const fleetDevices =
+        Object.values(devices);
+
+    const totalDevices =
+        fleetDevices.length;
+
+    const activeAlerts =
+        fleetDevices.filter(
+            (device) =>
+                device.emi_detected
+        ).length;
+
+    const averageSignal =
+        totalDevices > 0
+        ?
+        (
+            fleetDevices.reduce(
+                (
+                    total,
+                    device
+                ) =>
+                    total +
+                    device.signal_quality,
+                0
+            ) / totalDevices
+        ).toFixed(1)
+        :
+        "0";
+
+    const fleetHealth =
+        totalDevices > 0
+        ?
+        (
+            (
+                (
+                    totalDevices -
+                    activeAlerts
+                ) /
+                totalDevices
+            ) * 100
+        ).toFixed(0)
+        :
+        "100";
 
 
     /* ====================================================
@@ -268,7 +334,10 @@ function App()
                     "20px",
 
                 fontFamily:
-                    "Arial"
+                    "Arial",
+
+                color:
+                    "white"
             }}
         >
 
@@ -279,9 +348,11 @@ function App()
             <h1
 
                 style={{
-                    color: "white",
-                    textAlign: "center",
-                    marginBottom: "40px"
+                    textAlign:
+                        "center",
+
+                    marginBottom:
+                        "40px"
                 }}
             >
                 Intelligent Embedded Diagnostic System
@@ -295,303 +366,127 @@ function App()
             <div
 
                 style={{
-                    display: "grid",
+                    display:
+                        "grid",
 
                     gridTemplateColumns:
                         "1fr 1fr",
 
-                    gap: "20px",
+                    gap:
+                        "20px",
 
-                    marginBottom: "30px"
+                    marginBottom:
+                        "30px"
                 }}
             >
 
+                <TelemetryCard
+                    telemetry={telemetry}
+                />
 
-                {/* ===================================== */}
-                {/* TELEMETRY OVERVIEW */}
-                {/* ===================================== */}
-
-                <div
-
-                    style={{
-                        backgroundColor:
-                            telemetry.emi_detected
-                                ? "#7F1D1D"
-                                : "#1E293B",
-
-                        border:
-                            telemetry.emi_detected
-                                ? "2px solid #EF4444"
-                                : "none",
-
-                        color:
-                            "white",
-
-                        padding:
-                            "25px",
-
-                        borderRadius:
-                            "16px",
-
-                        boxShadow:
-                            "0px 0px 15px rgba(0,0,0,0.4)"
-                    }}
-                >
-
-                    <h2>
-                        Telemetry Overview
-                    </h2>
-
-
-                    {/* EMI ALERT */}
-
-                    {
-                        telemetry.emi_detected &&
-                        (
-                            <div
-
-                                style={{
-                                    backgroundColor:
-                                        "#FF4D4D",
-
-                                    padding:
-                                        "12px",
-
-                                    borderRadius:
-                                        "10px",
-
-                                    marginBottom:
-                                        "20px",
-
-                                    fontWeight:
-                                        "bold"
-                                }}
-                            >
-                                ⚠ EMI ANOMALY DETECTED
-                            </div>
-                        )
-                    }
-
-
-                    <p>
-                        Device ID:
-                        <strong>
-                            {" "}
-                            {telemetry.device_id}
-                        </strong>
-                    </p>
-
-                    <p>
-                        Anomaly Score:
-                        <strong>
-                            {" "}
-                            {telemetry.anomaly_score}
-                        </strong>
-                    </p>
-
-                    <p>
-                        Signal Quality:
-                        <strong>
-                            {" "}
-                            {telemetry.signal_quality}
-                        </strong>
-                    </p>
-
-                    <p>
-                        EMI Detected:
-                        <strong>
-                            {" "}
-                            {
-                                telemetry.emi_detected
-                                    ? "true"
-                                    : "false"
-                            }
-                        </strong>
-                    </p>
-
-                </div>
-
-
-                {/* ===================================== */}
-                {/* DEVICE STATUS */}
-                {/* ===================================== */}
-
-                <div
-
-                    style={{
-                        backgroundColor:
-                            "#1E293B",
-
-                        color:
-                            "white",
-
-                        padding:
-                            "25px",
-
-                        borderRadius:
-                            "16px",
-
-                        boxShadow:
-                            "0px 0px 15px rgba(0,0,0,0.4)"
-                    }}
-                >
-
-                    <h2>
-                        Device Status
-                    </h2>
-
-                    <p>
-                        Registered Devices:
-                        <strong>
-                            {" "}
-                            {
-                                Object.keys(
-                                    devices
-                                ).length
-                            }
-                        </strong>
-                    </p>
-
-                    <p>
-                        Backend Status:
-                        <strong>
-                            {" "}
-                            operational
-                        </strong>
-                    </p>
-
-                    <p>
-                        WebSocket:
-                        <strong>
-                            {" "}
-                            {
-                                wsConnected
-                                    ? "connected"
-                                    : "disconnected"
-                            }
-                        </strong>
-                    </p>
-
-                </div>
+                <DeviceStatusCard
+                    connected={wsConnected}
+                    devices={fleetDevices}
+                />
 
             </div>
 
 
             {/* ========================================= */}
-            {/* FLEET DEVICE GRID */}
+            {/* FLEET STATS */}
             {/* ========================================= */}
 
             <div
 
                 style={{
-                    marginBottom: "30px"
+                    display:
+                        "grid",
+
+                    gridTemplateColumns:
+                        "repeat(auto-fit, minmax(250px, 1fr))",
+
+                    gap:
+                        "20px",
+
+                    marginBottom:
+                        "30px"
                 }}
             >
 
-                <h2
-                    style={{
-                        color: "white",
-                        marginBottom: "20px"
-                    }}
-                >
-                    Active Fleet Devices
-                </h2>
+                <FleetStatCard
+                    title="Connected Devices"
+                    value={totalDevices}
+                />
 
+                <FleetStatCard
+                    title="Active EMI Alerts"
+                    value={activeAlerts}
+                />
 
-                <div
+                <FleetStatCard
+                    title="Average Signal"
+                    value={averageSignal}
+                />
 
-                    style={{
-                        display: "grid",
-
-                        gridTemplateColumns:
-                            "repeat(auto-fit, minmax(250px, 1fr))",
-
-                        gap: "20px"
-                    }}
-                >
-
-                    {
-                        Object.values(devices)
-                        .map((device) =>
-                        (
-
-                            <div
-
-                                key={
-                                    device.device_id
-                                }
-
-                                style={{
-                                    backgroundColor:
-                                        device.emi_detected
-                                            ? "#7F1D1D"
-                                            : "#1E293B",
-
-                                    border:
-                                        device.emi_detected
-                                            ? "2px solid #EF4444"
-                                            : "1px solid #334155",
-
-                                    color:
-                                        "white",
-
-                                    padding:
-                                        "20px",
-
-                                    borderRadius:
-                                        "14px"
-                                }}
-                            >
-
-                                <h3>
-                                    {
-                                        device.device_id
-                                    }
-                                </h3>
-
-                                <p>
-                                    Signal:
-                                    <strong>
-                                        {" "}
-                                        {
-                                            device.signal_quality
-                                        }
-                                    </strong>
-                                </p>
-
-                                <p>
-                                    Anomaly:
-                                    <strong>
-                                        {" "}
-                                        {
-                                            device.anomaly_score
-                                        }
-                                    </strong>
-                                </p>
-
-                                <p>
-                                    EMI:
-                                    <strong>
-                                        {" "}
-                                        {
-                                            device.emi_detected
-                                                ? "ALERT"
-                                                : "NORMAL"
-                                        }
-                                    </strong>
-                                </p>
-
-                            </div>
-                        ))
-                    }
-
-                </div>
+                <FleetStatCard
+                    title="Fleet Health"
+                    value={`${fleetHealth}%`}
+                />
 
             </div>
 
 
             {/* ========================================= */}
-            {/* TELEMETRY CHART */}
+            {/* DEVICE GRID */}
+            {/* ========================================= */}
+
+            <h2
+
+                style={{
+                    marginBottom:
+                        "20px"
+                }}
+            >
+                Active Fleet Devices
+            </h2>
+
+            <div
+
+                style={{
+                    display:
+                        "grid",
+
+                    gridTemplateColumns:
+                        "repeat(auto-fit, minmax(300px, 1fr))",
+
+                    gap:
+                        "20px",
+
+                    marginBottom:
+                        "30px"
+                }}
+            >
+
+                {
+                    fleetDevices.map(
+                        (
+                            device,
+                            index
+                        ) => (
+
+                            <FleetDeviceCard
+                                key={index}
+                                device={device}
+                            />
+                        )
+                    )
+                }
+
+            </div>
+
+
+            {/* ========================================= */}
+            {/* TELEMETRY ANALYTICS */}
             {/* ========================================= */}
 
             <div
@@ -607,13 +502,18 @@ function App()
                         "16px",
 
                     boxShadow:
-                        "0px 0px 15px rgba(0,0,0,0.4)"
+                        "0px 0px 15px rgba(0,0,0,0.4)",
+
+                    marginBottom:
+                        "30px"
                 }}
             >
 
                 <h2
+
                     style={{
-                        color: "white"
+                        marginBottom:
+                            "20px"
                     }}
                 >
                     Live Telemetry Analytics
@@ -626,6 +526,15 @@ function App()
                 />
 
             </div>
+
+
+            {/* ========================================= */}
+            {/* ACTIVITY FEED */}
+            {/* ========================================= */}
+
+            <ActivityFeed
+                activityFeed={activityFeed}
+            />
 
         </div>
     );

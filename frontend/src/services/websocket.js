@@ -1,26 +1,27 @@
-// =========================================================
-//
-// Intelligent Embedded Diagnostic System (IEDS)
-// WebSocket Service
-//
-// File: websocket.js
-//
-// Description:
-// Handles frontend WebSocket communication
-// with FastAPI backend.
-//
-// Features:
-// - Real-time telemetry streaming
-// - WebSocket connection management
-// - Automatic telemetry reception
-// - Connection state callbacks
-//
-// =========================================================
+/*
+=========================================================
+Intelligent Embedded Diagnostic System (IEDS)
+Author: HendyWab
+
+WebSocket Service
+
+Description:
+Handles real-time telemetry streaming
+between frontend dashboard and FastAPI backend.
+=========================================================
+*/
 
 
-/* ========================================================
+/* =======================================================
+ * ACTIVE SOCKET
+ * ===================================================== */
+
+let socket = null;
+
+
+/* =======================================================
  * CONNECT WEBSOCKET
- * ====================================================== */
+ * ===================================================== */
 
 export function connectWebSocket(
     onMessage,
@@ -28,20 +29,22 @@ export function connectWebSocket(
     onDisconnect
 )
 {
+    /*
+    -------------------------------------------------------
+    CREATE SOCKET CONNECTION
+    -------------------------------------------------------
+    */
 
-    /* ====================================================
-     * CREATE SOCKET
-     * ================================================== */
-
-    const socket =
-        new WebSocket(
-            "ws://localhost:8000/ws/telemetry"
-        );
+    socket = new WebSocket(
+        "ws://127.0.0.1:8000/ws/telemetry"
+    );
 
 
-    /* ====================================================
-     * ON OPEN
-     * ================================================== */
+    /*
+    -------------------------------------------------------
+    CONNECTION SUCCESS
+    -------------------------------------------------------
+    */
 
     socket.onopen = () =>
     {
@@ -56,20 +59,21 @@ export function connectWebSocket(
     };
 
 
-    /* ====================================================
-     * ON MESSAGE
-     * ================================================== */
+    /*
+    -------------------------------------------------------
+    TELEMETRY RECEIVED
+    -------------------------------------------------------
+    */
 
     socket.onmessage = (event) =>
     {
-
         const data =
             JSON.parse(
                 event.data
             );
 
         console.log(
-            "WebSocket telemetry:",
+            "Telemetry received:",
             data
         );
 
@@ -77,9 +81,11 @@ export function connectWebSocket(
     };
 
 
-    /* ====================================================
-     * ON CLOSE
-     * ================================================== */
+    /*
+    -------------------------------------------------------
+    CONNECTION CLOSED
+    -------------------------------------------------------
+    */
 
     socket.onclose = () =>
     {
@@ -94,9 +100,11 @@ export function connectWebSocket(
     };
 
 
-    /* ====================================================
-     * ON ERROR
-     * ================================================== */
+    /*
+    -------------------------------------------------------
+    CONNECTION ERROR
+    -------------------------------------------------------
+    */
 
     socket.onerror = (error) =>
     {
@@ -107,9 +115,28 @@ export function connectWebSocket(
     };
 
 
-    /* ====================================================
-     * RETURN SOCKET
-     * ================================================== */
+    /*
+    -------------------------------------------------------
+    RETURN SOCKET
+    -------------------------------------------------------
+    */
 
     return socket;
+}
+
+
+/* =======================================================
+ * DISCONNECT WEBSOCKET
+ * ===================================================== */
+
+export function disconnectWebSocket()
+{
+    if(socket)
+    {
+        socket.close();
+
+        console.log(
+            "WebSocket manually closed"
+        );
+    }
 }

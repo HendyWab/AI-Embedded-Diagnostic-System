@@ -1,46 +1,25 @@
-import React,
+// =========================================================
+//
+// Intelligent Embedded Diagnostic System (IEDS)
+// Device Status Card
+//
+// Author: HendyWab
+//
+// Description:
+// Displays backend and fleet connection state.
+//
+// =========================================================
+
+import React from "react";
+
+function DeviceStatusCard({
+    connected,
+    devices
+})
 {
-    useEffect,
-    useState
-}
-from "react";
-
-import
-{
-    fetchDeviceStatus
-}
-from "../services/api";
-
-function DeviceStatusCard()
-{
-    const [deviceStatus,
-           setDeviceStatus] =
-        useState(null);
-
-    useEffect(() =>
-    {
-        async function loadDeviceStatus()
-        {
-            const data =
-                await fetchDeviceStatus();
-
-            setDeviceStatus(data);
-        }
-
-        loadDeviceStatus();
-
-    }, []);
-
-    if(!deviceStatus)
-    {
-        return (
-            <div>
-                Loading device status...
-            </div>
-        );
-    }
 
     return (
+
         <div
             style={{
                 backgroundColor: "#1E293B",
@@ -50,23 +29,49 @@ function DeviceStatusCard()
                     "0px 0px 10px rgba(0,0,0,0.4)"
             }}
         >
-            <h2>Device Status</h2>
+
+            <h2>
+                Device Status
+            </h2>
 
             <p>
                 Registered Devices:
+                {" "}
+
                 <strong>
-                    {" "}
-                    {deviceStatus.registered_devices}
+                    {devices.length}
                 </strong>
             </p>
 
             <p>
                 Backend Status:
+                {" "}
+
                 <strong>
-                    {" "}
-                    {deviceStatus.backend_status}
+                    operational
                 </strong>
             </p>
+
+            <p>
+                WebSocket:
+                {" "}
+
+                <strong
+                    style={{
+                        color:
+                            connected
+                            ? "#4ADE80"
+                            : "#FF4D4D"
+                    }}
+                >
+                    {
+                        connected
+                        ? "connected"
+                        : "disconnected"
+                    }
+                </strong>
+            </p>
+
         </div>
     );
 }

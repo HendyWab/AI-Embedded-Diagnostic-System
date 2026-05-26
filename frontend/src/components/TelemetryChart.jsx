@@ -1,34 +1,28 @@
 // =========================================================
 //
 // Intelligent Embedded Diagnostic System (IEDS)
-// Real-Time Telemetry Chart Component
+// Telemetry Analytics Chart
 //
-// File: TelemetryChart.jsx
+// Author: HendyWab
 //
 // Description:
-// Renders real-time telemetry analytics using Recharts.
+// Real-time telemetry visualization.
 //
 // Features:
-// - Live telemetry plotting
-// - Signal quality visualization
-// - Anomaly score visualization
-// - EMI threshold indication
-// - Responsive observability chart
-// - WebSocket/MQTT telemetry rendering
+// - Signal quality monitoring
+// - Anomaly score tracking
+// - Threshold visualization
+// - Live telemetry updates
 //
 // =========================================================
 
 
 /* ========================================================
- * REACT IMPORTS
+ * IMPORTS
  * ====================================================== */
 
-import React from "react";
-
-
-/* ========================================================
- * RECHARTS IMPORTS
- * ====================================================== */
+import React
+from "react";
 
 import
 {
@@ -45,7 +39,7 @@ from "recharts";
 
 
 /* ========================================================
- * TELEMETRY CHART COMPONENT
+ * COMPONENT
  * ====================================================== */
 
 function TelemetryChart(
@@ -55,188 +49,133 @@ function TelemetryChart(
 {
 
     /* ====================================================
-     * DATA NORMALIZATION
+     * SAFETY CHECK
      * ================================================== */
-    /*
-     * Converts raw telemetry payloads
-     * into chart-compatible data.
-     */
+
+    if(
+        !telemetryHistory ||
+        telemetryHistory.length === 0
+    )
+    {
+        return (
+
+            <div
+                style={{
+                    color: "white",
+                    padding: "20px"
+                }}
+            >
+                Waiting for telemetry history...
+            </div>
+        );
+    }
+
+
+    /* ====================================================
+     * FORMAT CHART DATA
+     * ================================================== */
 
     const chartData =
         telemetryHistory.map(
-            (item) =>
+            (entry) =>
             ({
                 time:
-                new Date(
-                    item.timestamp
-                ).toLocaleTimeString(),
+                    new Date(
+                        entry.timestamp
+                    ).toLocaleTimeString(),
 
-                /*
-                 * Scale anomaly score
-                 * from 0-1 to percentage.
-                 */
+                signal_quality:
+                    entry.signal_quality,
 
-                anomaly:
-                item.anomaly_score * 100,
-
-                signal:
-                item.signal_quality,
-
-                emi:
-                item.emi_detected
+                anomaly_score:
+                    entry.anomaly_score * 100
             })
         );
 
 
     /* ====================================================
-     * COMPONENT UI
+     * RENDER
      * ================================================== */
 
     return (
 
         <div
-
             style={{
-                backgroundColor:
-                    "#1E293B",
-
-                padding:
-                    "20px",
-
-                borderRadius:
-                    "12px",
-
-                marginTop:
-                    "20px",
-
-                boxShadow:
-                    "0px 0px 10px rgba(0,0,0,0.4)"
+                width: "100%",
+                height: "350px"
             }}
         >
 
-
-            {/* ========================================= */}
-            {/* RESPONSIVE CHART CONTAINER */}
-            {/* ========================================= */}
-
-            <ResponsiveContainer
-                width="100%"
-                height={350}
-            >
+            <ResponsiveContainer>
 
                 <LineChart
                     data={chartData}
                 >
 
-
-                    {/* ================================= */}
+                    {/* ============================= */}
                     {/* GRID */}
-                    {/* ================================= */}
+                    {/* ============================= */}
 
                     <CartesianGrid
-
                         strokeDasharray="3 3"
-
-                        stroke="#64748B"
+                        stroke="#475569"
                     />
 
 
-                    {/* ================================= */}
-                    {/* X AXIS */}
-                    {/* ================================= */}
+                    {/* ============================= */}
+                    {/* AXES */}
+                    {/* ============================= */}
 
                     <XAxis
-
                         dataKey="time"
-
                         stroke="#CBD5E1"
                     />
-
-
-                    {/* ================================= */}
-                    {/* Y AXIS */}
-                    {/* ================================= */}
 
                     <YAxis
-
                         stroke="#CBD5E1"
-
-                        domain={[0, 100]}
                     />
 
 
-                    {/* ================================= */}
+                    {/* ============================= */}
                     {/* TOOLTIP */}
-                    {/* ================================= */}
+                    {/* ============================= */}
 
                     <Tooltip />
 
 
-                    {/* ================================= */}
-                    {/* ANOMALY THRESHOLD */}
-                    {/* ================================= */}
+                    {/* ============================= */}
+                    {/* THRESHOLD */}
+                    {/* ============================= */}
 
                     <ReferenceLine
-
                         y={70}
-
                         stroke="#EF4444"
-
                         strokeDasharray="5 5"
-
                         label="Anomaly Threshold"
                     />
 
 
-                    {/* ================================= */}
-                    {/* SIGNAL QUALITY LINE */}
-                    {/* ================================= */}
+                    {/* ============================= */}
+                    {/* SIGNAL QUALITY */}
+                    {/* ============================= */}
 
                     <Line
-
                         type="monotone"
-
-                        dataKey="signal"
-
-                        name="Signal Quality"
-
-                        stroke="#4ECDC4"
-
+                        dataKey="signal_quality"
+                        stroke="#4ADE80"
                         strokeWidth={3}
-
-                        dot={{
-                            r: 4
-                        }}
-
-                        activeDot={{
-                            r: 7
-                        }}
                     />
 
 
-                    {/* ================================= */}
-                    {/* ANOMALY SCORE LINE */}
-                    {/* ================================= */}
+                    {/* ============================= */}
+                    {/* ANOMALY SCORE */}
+                    {/* ============================= */}
 
                     <Line
-
                         type="monotone"
-
-                        dataKey="anomaly"
-
-                        name="Anomaly Score"
-
-                        stroke="#FF6B6B"
-
+                        dataKey="anomaly_score"
+                        stroke="#F87171"
                         strokeWidth={3}
-
-                        dot={{
-                            r: 4
-                        }}
-
-                        activeDot={{
-                            r: 7
-                        }}
                     />
 
                 </LineChart>

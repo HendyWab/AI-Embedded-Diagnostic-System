@@ -1,28 +1,47 @@
+# =========================================================
+#
+# Intelligent Embedded Diagnostic System (IEDS)
+# Author: HendyWab
+#
+# WebSocket Telemetry Route
+#
+# =========================================================
+
+
+# =========================================================
+# IMPORTS
+# =========================================================
+
+import asyncio
+import json
+
 from fastapi import (
     APIRouter,
-    WebSocket,
-    WebSocketDisconnect
+    WebSocket
 )
 
-from backend.services.websocket_manager import (
-    manager
+from backend.mqtt.mqtt_client import (
+    latest_telemetry
 )
+
+
+# =========================================================
+# ROUTER INITIALIZATION
+# =========================================================
 
 router = APIRouter()
 
 
-# =========================================
-# WEBSOCKET TELEMETRY STREAM
-# =========================================
+# =========================================================
+# TELEMETRY WEBSOCKET
+# =========================================================
 
 @router.websocket("/ws/telemetry")
-async def websocket_endpoint(
+async def telemetry_websocket(
     websocket: WebSocket
 ):
 
-    await manager.connect(
-        websocket
-    )
+    await websocket.accept()
 
     print(
         "WebSocket client connected"
@@ -32,16 +51,20 @@ async def websocket_endpoint(
 
         while True:
 
-            # Keep connection alive
+            if latest_telemetry:
 
-            await websocket.receive_text()
+                await websocket.send_text(
+                    json.dumps(
+                        latest_telemetry
+                    )
+                )
 
-    except WebSocketDisconnect:
+            await asyncio.sleep(2)
 
-        manager.disconnect(
-            websocket
-        )
+    except Exception as error:
 
         print(
-            "WebSocket client disconnected"
+            "WebSocket disconnected"
         )
+
+        print(error)

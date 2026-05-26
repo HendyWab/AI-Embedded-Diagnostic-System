@@ -1,242 +1,188 @@
 # =========================================================
 #
 # Intelligent Embedded Diagnostic System (IEDS)
-# FastAPI Main Application
-#
-# File: main.py
-#
-# Description:
-# Initializes the FastAPI backend application,
-# configures middleware, database initialization,
-# MQTT telemetry ingestion, WebSocket routing,
-# AI diagnostics integration, and REST endpoints.
+# Backend Core Application
 #
 # Author: HendyWab
 #
+# Description:
+# Main FastAPI backend entry point
+# for distributed telemetry diagnostics.
+#
+# Features:
+# - REST API routes
+# - WebSocket telemetry streaming
+# - MQTT infrastructure startup
+# - Real-time observability
+# - Multi-device diagnostics
+#
 # =========================================================
 
 
 # =========================================================
-# FASTAPI IMPORTS
+# IMPORTS
 # =========================================================
 
-from fastapi import FastAPI
+import json
+
+import asyncio
+
+from fastapi import (
+    FastAPI,
+    WebSocket
+)
 
 from fastapi.middleware.cors import (
     CORSMiddleware
-)
-
-
-# =========================================================
-# DATABASE IMPORTS
-# =========================================================
-
-from backend.database.db import (
-    engine,
-    Base
-)
-
-from backend.models.telemetry_db_model import (
-    TelemetryRecord
-)
-
-
-# =========================================================
-# ROUTE IMPORTS
-# =========================================================
-
-from backend.routes.telemetry import (
-    router as telemetry_router
-)
-
-from backend.routes.websocket import (
-    router as websocket_router
 )
 
 from backend.routes.ai_routes import (
     router as ai_router
 )
 
-
-# =========================================================
-# MQTT IMPORTS
-# =========================================================
+from backend.routes.device_routes import (
+    router as device_router
+)
 
 from backend.mqtt.mqtt_client import (
     start_mqtt
 )
 
-
-# =========================================================
-# DATABASE INITIALIZATION
-# =========================================================
-#
-# Automatically creates database tables
-# if they do not already exist.
-#
-# =========================================================
-
-Base.metadata.create_all(
-    bind=engine
-)
+import backend.mqtt.mqtt_client as mqtt_client
 
 
 # =========================================================
-# FASTAPI APPLICATION
+# FASTAPI INIT
 # =========================================================
 
 app = FastAPI(
 
     title=
-    "Intelligent Embedded Diagnostic System",
-
-    description=
-    "Real-Time AI-Assisted Embedded Telemetry "
-    "and EMI Diagnostic Platform",
+    "IEDS Backend API",
 
     version=
-    "1.0.0"
+    "0.4.0"
 )
 
 
 # =========================================================
-# CORS CONFIGURATION
-# =========================================================
-#
-# Allows frontend applications
-# to communicate with the backend.
-#
+# CORS
 # =========================================================
 
 app.add_middleware(
 
     CORSMiddleware,
 
-    allow_origins=["*"],
+    allow_origins=
+    ["*"],
 
-    allow_credentials=True,
+    allow_credentials=
+    True,
 
-    allow_methods=["*"],
+    allow_methods=
+    ["*"],
 
-    allow_headers=["*"],
+    allow_headers=
+    ["*"]
 )
 
 
 # =========================================================
-# MQTT INITIALIZATION
+# ROUTES
 # =========================================================
-#
-# Starts telemetry MQTT subscriber.
-#
-# =========================================================
-
-start_mqtt()
-
-
-# =========================================================
-# API ROUTE REGISTRATION
-# =========================================================
-
-app.include_router(
-    telemetry_router
-)
-
-app.include_router(
-    websocket_router
-)
 
 app.include_router(
     ai_router
 )
 
+app.include_router(
+    device_router
+)
+
 
 # =========================================================
-# ROOT ENDPOINT
+# STARTUP EVENT
 # =========================================================
-#
-# Backend operational status endpoint.
-#
+
+@app.on_event("startup")
+async def startup_event():
+
+    start_mqtt()
+
+    print(
+        "--------------------------------"
+    )
+
+    print(
+        "IEDS Backend Started"
+    )
+
+    print(
+        "MQTT infrastructure active"
+    )
+
+    print(
+        "AI diagnostics operational"
+    )
+
+    print(
+        "WebSocket streaming enabled"
+    )
+
+    print(
+        "--------------------------------"
+    )
+
+
+# =========================================================
+# ROOT ROUTE
 # =========================================================
 
 @app.get("/")
-
-async def root():
+def root():
 
     return {
 
-        "system":
-        "Intelligent Embedded Diagnostic System",
-
-        "status":
-        "operational",
-
-        "telemetry":
-        "active",
-
-        "mqtt":
-        "connected",
-
-        "ai_engine":
-        "initialized"
+        "message":
+        "IEDS Backend Running"
     }
 
 
 # =========================================================
-# HEALTH CHECK ENDPOINT
-# =========================================================
-#
-# Useful for monitoring,
-# deployment validation,
-# and future observability infrastructure.
-#
+# WEBSOCKET TELEMETRY STREAM
 # =========================================================
 
-@app.get("/health")
+@app.websocket("/ws/telemetry")
+async def websocket_telemetry(
+    websocket: WebSocket
+):
 
-async def health_check():
+    await websocket.accept()
 
-    return {
+    print(
+        "WebSocket client connected"
+    )
 
-        "backend":
-        "healthy",
+    try:
 
-        "database":
-        "connected",
+        while True:
 
-        "websocket":
-        "active",
+            if mqtt_client.latest_telemetry:
 
-        "mqtt":
-        "running",
+                await websocket.send_text(
 
-        "ai_engine":
-        "operational"
-    }
+                    json.dumps(
 
+                        mqtt_client.latest_telemetry
+                    )
+                )
 
-# =========================================================
-# AI STATUS ENDPOINT
-# =========================================================
-#
-# AI diagnostics system status endpoint.
-#
-# =========================================================
+            await asyncio.sleep(1)
 
-@app.get("/ai/status")
+    except Exception as error:
 
-async def ai_status():
+        print(
+            "WebSocket disconnected"
+        )
 
-    return {
-
-        "ai_engine":
-        "online",
-
-        "feature_extraction":
-        "enabled",
-
-        "health_scoring":
-        "enabled",
-
-        "anomaly_detection":
-        "active"
-    }
+        print(error)
