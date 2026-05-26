@@ -3,7 +3,7 @@
 # Intelligent Embedded Diagnostic System (IEDS)
 # Multi-Device MQTT Telemetry Client
 #
-# File: mqtt_client.py
+# Author: HendyWab
 #
 # Description:
 # Handles distributed telemetry ingestion
@@ -55,10 +55,12 @@ MQTT_TOPIC = "ieds/devices/+/telemetry"
 
 
 # =========================================================
-# ACTIVE DEVICE REGISTRY
+# GLOBAL TELEMETRY STATE
 # =========================================================
 
 active_devices = set()
+
+latest_telemetry = {}
 
 
 # =========================================================
@@ -96,6 +98,8 @@ def on_message(
     msg
 ):
 
+    global latest_telemetry
+
     try:
 
         payload = json.loads(
@@ -110,15 +114,17 @@ def on_message(
             device_id
         )
 
+        latest_telemetry = payload
+
         print(
             f"[{device_id}] MQTT telemetry received:",
             payload
         )
 
 
-        # =============================================
+        # =================================================
         # DATABASE STORAGE
-        # =============================================
+        # =================================================
 
         db = SessionLocal()
 
@@ -149,9 +155,9 @@ def on_message(
         db.close()
 
 
-        # =============================================
+        # =================================================
         # WEBSOCKET BROADCAST
-        # =============================================
+        # =================================================
 
         websocket_payload = {
 
