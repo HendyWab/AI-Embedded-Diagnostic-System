@@ -387,13 +387,17 @@ This repository follows a professional engineering workflow using:
 * Semantic version tagging
 * Issue-driven development
 
-Current releases:
+# Versioning
 
-```text
-v0.3-alpha
-v0.3.1-ai-stable
+## Git Tags
+
+v0.3-alpha  
+v0.3.1-ai-stable  
 v0.4.0
-```
+
+## Published Releases
+
+- v0.3-alpha
 
 ---
 
