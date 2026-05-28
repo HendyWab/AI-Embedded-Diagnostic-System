@@ -1,98 +1,143 @@
-# AI-Embedded-Diagnostic-System
+# IEDS — Intelligent Embedded Diagnostic System
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Embedded-AI%20Diagnostics-0A192F?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Embedded-Observability-0A192F?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/MQTT-RealTimeTelemetry-6C47FF?style=for-the-badge" />
   <img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi" />
-  <img src="https://img.shields.io/badge/React-Frontend-61DAFB?style=for-the-badge&logo=react" />
-  <img src="https://img.shields.io/badge/Telemetry-RealTime-FF6B6B?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/React-ObservabilityDashboard-61DAFB?style=for-the-badge&logo=react" />
+  <img src="https://img.shields.io/badge/WebSockets-LiveStreaming-FF6B6B?style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" />
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=22&pause=1200&color=3B82F6&center=true&vCenter=true&width=1000&lines=AI-Assisted+Embedded+Diagnostics;Real-Time+Telemetry+and+Observability;EMI+Monitoring+%7C+Signal+Analysis;FastAPI+%7C+React+%7C+Embedded+Systems;Intelligent+Electronic+Monitoring+Platform" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=22&pause=1200&color=2563EB&center=true&vCenter=true&width=1100&lines=Real-Time+Embedded+Telemetry+Platform;MQTT+Telemetry+Infrastructure;AI-Assisted+Embedded+Diagnostics;Fleet+Observability+%26+Monitoring;FastAPI+%7C+React+%7C+WebSockets+%7C+MQTT;Distributed+Embedded+Telemetry+Architecture" />
 </p>
 
 ---
 
-## Real-Time Embedded Observability, Telemetry and AI-Assisted Diagnostic Platform
+# Real-Time Embedded Telemetry & Observability Platform
 
-The **AI-Embedded-Diagnostic-System (IEDS)** is an AI-assisted embedded observability, telemetry, and diagnostic platform designed for real-time electronic diagnostics, anomaly detection, EMI analysis, signal monitoring, and intelligent telemetry visualization.
+The **Intelligent Embedded Diagnostic System (IEDS)** is a real-time embedded telemetry, observability, and AI-assisted diagnostic platform designed for distributed embedded systems monitoring, EMI anomaly detection, telemetry analytics, and fleet observability engineering.
 
 The platform combines:
 
-- Embedded telemetry acquisition
-- Real-time backend processing
-- AI-assisted anomaly detection
-- Signal observability workflows
-- Wireless telemetry infrastructure
-- Interactive engineering dashboards
-- Embedded diagnostic intelligence
+* MQTT telemetry infrastructure
+* Real-time WebSocket streaming
+* Embedded telemetry ingestion
+* Fleet observability analytics
+* AI-assisted anomaly detection
+* EMI monitoring workflows
+* Persistent telemetry storage
+* Interactive engineering dashboards
+* Distributed telemetry supervision
 
-The system is designed as a scalable architecture for:
+IEDS is designed as a scalable observability architecture for:
 
-- Embedded diagnostics
-- Intelligent instrumentation
-- Electronic fault analysis
-- EMI monitoring
-- Predictive observability workflows
-- Real-time telemetry engineering
+* Embedded diagnostics
+* Real-time telemetry engineering
+* Distributed device monitoring
+* Intelligent instrumentation
+* Signal quality analysis
+* EMI anomaly propagation
+* Embedded observability systems
 
 ---
 
 # System Architecture
 
 <p align="center">
-  <img src="./assets/architecture/ieds_architecture_v2.png" width="100%" />
+  <img src="./assets/architecture/ieds_system_architecture.png" width="100%" />
 </p>
+
+---
+
+# Telemetry Flow
+
+```text
+Embedded Devices / Simulators
+        ↓
+MQTT Broker (Mosquitto)
+        ↓
+FastAPI Backend Services
+        ↓
+Telemetry Processing Engine
+        ↓
+SQLite Persistence Layer
+        ↓
+WebSocket Broadcast
+        ↓
+React Observability Dashboard
+```
 
 ---
 
 # Features
 
-- Real-time telemetry dashboard
-- EMI anomaly detection alerts
-- AI-assisted anomaly scoring
-- Live telemetry visualization
-- FastAPI backend architecture
-- React frontend interface
-- Embedded telemetry simulator
-- Dynamic telemetry charts
-- Diagnostic observability workflows
-- WebSocket-ready telemetry architecture
-- Modular embedded diagnostic architecture
+* Real-time MQTT telemetry ingestion
+* Multi-device fleet observability
+* WebSocket live telemetry streaming
+* EMI anomaly detection & alert propagation
+* Real-time telemetry analytics
+* Activity/event feed
+* Signal quality monitoring
+* Persistent telemetry storage
+* Fleet health metrics
+* Distributed embedded device monitoring
+* React observability dashboard
+* FastAPI backend infrastructure
+* Fault-tolerant telemetry pipeline
+* Dynamic telemetry charts
+* Real-time anomaly visualization
+* Live telemetry broadcasting
+
+---
+
+# Dashboard Preview
+
+<p align="center">
+  <img src="./assets/dashboard/dashboard_professional_v2.png" width="100%" />
+</p>
 
 ---
 
 # Technology Stack
 
-## Backend
-
-- FastAPI
-- Python
-- Uvicorn
-- REST API Architecture
-
 ## Frontend
 
-- React
-- Vite
-- Axios
-- Recharts
-- Plotly.js (planned)
+* React
+* Vite
+* Axios
+* Recharts
 
-## Embedded & Telemetry
+## Backend
 
-- ESP32 / STM32 / PIC
-- UART / SPI / I2C
-- MQTT-ready architecture
-- Telemetry simulation engine
+* FastAPI
+* Python
+* Uvicorn
+* WebSockets
+* SQLite
+
+## Telemetry Infrastructure
+
+* MQTT
+* Eclipse Mosquitto
+* Real-time telemetry streaming
+* Distributed telemetry ingestion
+
+## Embedded Systems
+
+* ESP32
+* STM32
+* PIC MCU
+* Embedded telemetry simulators
 
 ## AI & Diagnostics
 
-- Anomaly Scoring
-- Signal Analysis
-- EMI Detection
-- Intelligent Observability
+* EMI anomaly detection
+* Signal analysis
+* Telemetry anomaly scoring
+* Observability analytics
+* Diagnostic event propagation
 
 ---
 
@@ -102,16 +147,20 @@ The system is designed as a scalable architecture for:
 AI-Embedded-Diagnostic-System/
 │
 ├── backend/
+│   ├── database/
+│   ├── mqtt/
 │   ├── models/
 │   ├── routes/
-│   ├── simulator/
 │   ├── services/
+│   ├── simulator/
+│   ├── websocket/
 │   └── main.py
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
 │   │   ├── services/
+│   │   ├── charts/
 │   │   └── App.jsx
 │   │
 │   └── package.json
@@ -122,8 +171,9 @@ AI-Embedded-Diagnostic-System/
 │   └── logos/
 │
 ├── README.md
+├── requirements.txt
 ├── LICENSE
-└── requirements.txt
+└── .gitignore
 ```
 
 ---
@@ -219,9 +269,27 @@ http://localhost:5173
 
 ---
 
-# Running the Telemetry Simulator
+# Running MQTT Broker
 
-The telemetry simulator generates synthetic embedded telemetry and diagnostic events in real time.
+Start Mosquitto MQTT Broker locally.
+
+Default broker:
+
+```text
+localhost:1883
+```
+
+Example telemetry topics:
+
+```text
+ieds/esp32/telemetry
+ieds/stm32/telemetry
+ieds/pic/telemetry
+```
+
+---
+
+# Running the Telemetry Simulator
 
 Run the simulator:
 
@@ -229,95 +297,103 @@ Run the simulator:
 python backend/simulator/telemetry_simulator.py
 ```
 
-The simulator continuously generates:
+The simulator generates:
 
-- Anomaly scores
-- EMI detection states
-- Signal quality metrics
-- Telemetry packets
-- Diagnostic events
+* Real-time telemetry packets
+* Signal quality metrics
+* EMI anomaly events
+* Device activity states
+* Telemetry analytics data
+* Fleet observability metrics
 
 ---
 
 # Current Development Status
 
-## Implemented
+## Completed
 
-- FastAPI backend
-- React telemetry dashboard
-- Real-time telemetry ingestion
-- Embedded telemetry simulator
-- Live anomaly visualization
-- EMI alert system
-- Dynamic telemetry charts
-- Real-time dashboard updates
-- GitHub engineering project management workflow
+* MQTT telemetry infrastructure
+* Real-time WebSocket streaming
+* Multi-device telemetry monitoring
+* Persistent telemetry storage
+* Fleet observability dashboard
+* EMI anomaly propagation
+* Activity/event feed
+* Dynamic telemetry analytics
+* Fault-tolerant backend architecture
+* Real-time telemetry visualization
 
 ## In Progress
 
-- WebSocket telemetry streaming
-- Persistent telemetry storage
-- MQTT integration
-- ESP32 hardware integration
-- AI anomaly engine improvements
-- Multi-device telemetry support
+* Historical telemetry analytics
+* Authentication system
+* ESP32 live hardware integration
+* AI anomaly inference engine
+* Distributed telemetry scaling
+* Advanced observability metrics
 
 ---
 
 # Engineering Objectives
 
-The platform aims to provide:
+IEDS aims to provide:
 
-- Real-time electronic observability
-- Intelligent anomaly diagnostics
-- Embedded telemetry acquisition
-- Wireless diagnostic communication
-- Predictive electronic analysis
-- Embedded observability infrastructure
-- AI-assisted engineering workflows
-
----
-
-# Future Roadmap
-
-- Real-time WebSocket observability
-- Persistent telemetry database
-- MQTT broker integration
-- ESP32 firmware deployment
-- Advanced waveform visualization
-- TinyML anomaly inference
-- Multi-device observability
-- Cloud telemetry synchronization
-- Predictive maintenance analytics
+* Real-time embedded observability
+* Intelligent telemetry analytics
+* AI-assisted diagnostic workflows
+* Distributed embedded supervision
+* Scalable telemetry infrastructure
+* Real-time fleet monitoring
+* Embedded anomaly intelligence
+* Modern observability engineering
 
 ---
 
-# Screenshots
+# Roadmap
 
-## Real-Time Telemetry Dashboard
+## Phase 3 — Dashboard Professionalization
 
-<p align="center">
-  <img src="./assets/dashboard/dashboard_preview.png" width="100%" />
-</p>
+* Historical telemetry visualization
+* Fleet analytics
+* Enhanced observability UX
+* Dashboard optimization
+* Advanced telemetry filtering
+
+## Phase 4 — Hardware Integration
+
+* ESP32 live telemetry
+* Embedded firmware integration
+* Wireless telemetry acquisition
+* Real sensor integration
+
+## Phase 5 — AI Diagnostics
+
+* Intelligent anomaly classification
+* TinyML inference
+* Predictive diagnostics
+* AI-assisted telemetry analysis
 
 ---
 
-# GitHub Project Management
+# GitHub Engineering Workflow
 
-This repository uses:
+This repository follows a professional engineering workflow using:
 
-- GitHub Projects
-- Engineering milestones
-- Issue tracking
-- Observability roadmap management
+* GitHub Projects
+* Feature branch development
+* Protected main branch
+* Milestone-based releases
+* Squash merge strategy
+* Semantic version tagging
+* Issue-driven development
 
-Project workflow includes:
+Current releases:
 
-- Telemetry infrastructure
-- Embedded integration
-- AI diagnostic systems
-- Frontend/backend evolution
-- Observability engineering
+```text
+v0.3-alpha
+v0.3.1-ai-stable
+v0.4.0
+```
 
 ---
 
@@ -326,19 +402,21 @@ Project workflow includes:
 ```text
 embedded-systems
 telemetry
+mqtt
 fastapi
 react
-ai-diagnostics
-observability
+websockets
 iot
+observability
+embedded-observability
 electronics
 signal-processing
-mqtt
-esp32
-dashboard
 anomaly-detection
-wireless-telemetry
 real-time-systems
+fleet-monitoring
+dashboard
+python
+embedded-diagnostics
 ```
 
 ---
