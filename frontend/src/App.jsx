@@ -1,29 +1,28 @@
 // =========================================================
 //
 // Intelligent Embedded Diagnostic System (IEDS)
-// Fleet Observability Dashboard
+// Professional Observability Dashboard
 //
 // Author: HendyWab
 //
 // Description:
-// Main real-time frontend dashboard
-// for distributed telemetry monitoring.
+// Real-time telemetry observability platform.
 //
 // Features:
-// - Live WebSocket telemetry
-// - Fleet observability
-// - EMI anomaly visualization
-// - Device monitoring
-// - Real-time analytics
-// - Fleet statistics
+// - Real-time WebSocket telemetry
+// - Historical telemetry preload
+// - Fleet monitoring
+// - KPI analytics
 // - Activity feed
+// - Live telemetry charts
+// - Multi-device observability
 //
 // =========================================================
 
 
-/* ========================================================
- * REACT IMPORTS
- * ====================================================== */
+// =========================================================
+// IMPORTS
+// =========================================================
 
 import React,
 {
@@ -32,33 +31,25 @@ import React,
 }
 from "react";
 
-
-/* ========================================================
- * COMPONENT IMPORTS
- * ====================================================== */
-
-import TelemetryCard
-from "./components/TelemetryCard";
+import "./App.css";
 
 import DeviceStatusCard
 from "./components/DeviceStatusCard";
 
+import TelemetryCard
+from "./components/TelemetryCard";
+
 import TelemetryChart
 from "./components/TelemetryChart";
-
-import FleetStatCard
-from "./components/FleetStatCard";
 
 import FleetDeviceCard
 from "./components/FleetDeviceCard";
 
+import FleetStatCard
+from "./components/FleetStatCard";
+
 import ActivityFeed
 from "./components/ActivityFeed";
-
-
-/* ========================================================
- * SERVICE IMPORTS
- * ====================================================== */
 
 import
 {
@@ -66,54 +57,48 @@ import
 }
 from "./services/websocket";
 
+import
+{
+    fetchTelemetryHistory
+}
+from "./services/api";
 
-/* ========================================================
- * STYLE IMPORTS
- * ====================================================== */
 
-import "./App.css";
-
-
-/* ========================================================
- * MAIN APP
- * ====================================================== */
+// =========================================================
+// COMPONENT
+// =========================================================
 
 function App()
 {
 
-    /* ====================================================
-     * STATES
-     * ================================================== */
+    // =====================================================
+    // STATE
+    // =====================================================
 
-    const [
-        telemetry,
-        setTelemetry
-    ] = useState(null);
+    const [telemetry,
+           setTelemetry] =
+        useState(null);
 
-    const [
-        telemetryHistory,
-        setTelemetryHistory
-    ] = useState([]);
+    const [devices,
+           setDevices] =
+        useState({});
 
-    const [
-        devices,
-        setDevices
-    ] = useState({});
+    const [telemetryHistory,
+           setTelemetryHistory] =
+        useState([]);
 
-    const [
-        wsConnected,
-        setWsConnected
-    ] = useState(false);
+    const [activityFeed,
+           setActivityFeed] =
+        useState([]);
 
-    const [
-        activityFeed,
-        setActivityFeed
-    ] = useState([]);
+    const [websocketStatus,
+           setWebsocketStatus] =
+        useState("disconnected");
 
 
-    /* ====================================================
-     * WEBSOCKET INIT
-     * ================================================== */
+    // =====================================================
+    // WEBSOCKET CONNECTION
+    // =====================================================
 
     useEffect(() =>
     {
@@ -121,88 +106,80 @@ function App()
         const socket =
             connectWebSocket(
 
-                /* ========================================
-                 * ON MESSAGE
-                 * ====================================== */
+                // =========================================
+                // ON MESSAGE
+                // =========================================
 
-                (incomingTelemetry) =>
+                (telemetryData) =>
                 {
 
                     console.log(
                         "Telemetry received:",
-                        incomingTelemetry
+                        telemetryData
                     );
 
-
-                    /* ====================================
-                     * UPDATE CURRENT TELEMETRY
-                     * ================================== */
+                    // =====================================
+                    // CURRENT TELEMETRY
+                    // =====================================
 
                     setTelemetry(
-                        incomingTelemetry
+                        telemetryData
                     );
 
 
-                    /* ====================================
-                     * UPDATE HISTORY
-                     * ================================== */
-
-                    setTelemetryHistory(
-                        (prevHistory) =>
-                        {
-
-                            const updated =
-                            [
-                                ...prevHistory,
-                                incomingTelemetry
-                            ];
-
-                            return updated.slice(-20);
-                        }
-                    );
-
-
-                    /* ====================================
-                     * UPDATE DEVICE REGISTRY
-                     * ================================== */
+                    // =====================================
+                    // DEVICE REGISTRY
+                    // =====================================
 
                     setDevices(
-                        (prevDevices) =>
+                        (previousDevices) =>
                         ({
-
-                            ...prevDevices,
+                            ...previousDevices,
 
                             [
-                                incomingTelemetry.device_id
+                                telemetryData.device_id
                             ]:
-                            incomingTelemetry
+                            telemetryData
                         })
                     );
 
 
-                    /* ====================================
-                     * UPDATE ACTIVITY FEED
-                     * ================================== */
+                    // =====================================
+                    // TELEMETRY HISTORY
+                    // =====================================
+
+                    setTelemetryHistory(
+                        (previousHistory) =>
+                        [
+
+                            ...previousHistory,
+
+                            telemetryData
+
+                        ].slice(-30)
+                    );
+
+
+                    // =====================================
+                    // ACTIVITY FEED
+                    // =====================================
 
                     setActivityFeed(
-                        (prevFeed) =>
-                        {
+                        (previousFeed) =>
+                        [
 
-                            const updated =
-                            [
-                                incomingTelemetry,
-                                ...prevFeed
-                            ];
+                            telemetryData,
 
-                            return updated.slice(0, 15);
-                        }
+                            ...previousFeed
+
+                        ].slice(0, 20)
                     );
                 },
 
 
-                /* ========================================
-                 * ON CONNECT
-                 * ====================================== */
+                // =========================================
+                // ON CONNECT
+                // =========================================
 
                 () =>
                 {
@@ -211,13 +188,15 @@ function App()
                         "WebSocket connected"
                     );
 
-                    setWsConnected(true);
+                    setWebsocketStatus(
+                        "connected"
+                    );
                 },
 
 
-                /* ========================================
-                 * ON DISCONNECT
-                 * ====================================== */
+                // =========================================
+                // ON DISCONNECT
+                // =========================================
 
                 () =>
                 {
@@ -226,118 +205,237 @@ function App()
                         "WebSocket disconnected"
                     );
 
-                    setWsConnected(false);
+                    setWebsocketStatus(
+                        "disconnected"
+                    );
                 }
             );
 
 
-        /* ================================================
-         * CLEANUP
-         * ============================================== */
+        // ================================================
+        // CLEANUP
+        // ================================================
 
         return () =>
         {
+
             socket.close();
         };
 
     }, []);
 
 
-    /* ====================================================
-     * LOADING STATE
-     * ================================================== */
+    // =====================================================
+    // LOAD TELEMETRY HISTORY
+    // =====================================================
 
-    if(!telemetry)
+    useEffect(() =>
     {
-        return (
 
-            <div
+        async function loadHistory()
+        {
 
-                style={{
-                    color: "white",
-                    padding: "40px",
-                    backgroundColor: "#020617",
-                    height: "100vh"
-                }}
-            >
-                Waiting for telemetry...
-            </div>
-        );
-    }
+            try
+            {
+
+                const history =
+                    await fetchTelemetryHistory();
+
+                // =========================================
+                // VALIDATE RESPONSE
+                // =========================================
+
+                if(
+                    !history ||
+                    !Array.isArray(history)
+                )
+                {
+
+                    console.warn(
+                        "No telemetry history available."
+                    );
+
+                    return;
+                }
 
 
-    /* ====================================================
-     * FLEET METRICS
-     * ================================================== */
+                // =========================================
+                // ORDER HISTORY
+                // =========================================
 
-    const fleetDevices =
-        Object.values(devices);
+                const orderedHistory =
+                    [...history].reverse();
 
-    const totalDevices =
-        fleetDevices.length;
+
+                // =========================================
+                // LOAD HISTORY
+                // =========================================
+
+                setTelemetryHistory(
+                    orderedHistory
+                );
+
+
+                // =========================================
+                // LOAD ACTIVITY FEED
+                // =========================================
+
+                setActivityFeed(
+
+                    orderedHistory
+                        .slice(-20)
+                        .reverse()
+                );
+
+
+                // =========================================
+                // REBUILD DEVICE REGISTRY
+                // =========================================
+
+                const rebuiltDevices = {};
+
+                orderedHistory.forEach(
+                    (entry) =>
+                    {
+
+                        rebuiltDevices[
+                            entry.device_id
+                        ] = entry;
+                    }
+                );
+
+                setDevices(
+                    rebuiltDevices
+                );
+
+
+                // =========================================
+                // LOAD CURRENT TELEMETRY
+                // =========================================
+
+                if(
+                    orderedHistory.length > 0
+                )
+                {
+
+                    setTelemetry(
+
+                        orderedHistory[
+                            orderedHistory.length - 1
+                        ]
+                    );
+                }
+
+
+                console.log(
+                    "Telemetry history loaded successfully."
+                );
+            }
+
+            catch(error)
+            {
+
+                console.error(
+                    "History load failed:",
+                    error
+                );
+            }
+        }
+
+        loadHistory();
+
+    }, []);
+
+
+    // =====================================================
+    // DERIVED METRICS
+    // =====================================================
+
+    const deviceList =
+        Object.values(devices || {});
+
+
+    // =====================================================
+    // ACTIVE ALERTS
+    // =====================================================
 
     const activeAlerts =
-        fleetDevices.filter(
+        deviceList.filter(
             (device) =>
                 device.emi_detected
         ).length;
 
+
+    // =====================================================
+    // AVERAGE SIGNAL
+    // =====================================================
+
     const averageSignal =
-        totalDevices > 0
+        deviceList.length > 0
+
         ?
+
         (
-            fleetDevices.reduce(
+            deviceList.reduce(
                 (
                     total,
                     device
                 ) =>
+
                     total +
                     device.signal_quality,
+
                 0
-            ) / totalDevices
+            ) / deviceList.length
         ).toFixed(1)
+
         :
+
         "0";
 
+
+    // =====================================================
+    // FLEET HEALTH
+    // =====================================================
+
     const fleetHealth =
-        totalDevices > 0
+        deviceList.length > 0
+
         ?
+
         (
             (
-                (
-                    totalDevices -
-                    activeAlerts
-                ) /
-                totalDevices
+                deviceList.filter(
+                    (device) =>
+                        !device.emi_detected
+                ).length
+
+                /
+
+                deviceList.length
             ) * 100
         ).toFixed(0)
+
         :
-        "100";
+
+        "0";
 
 
-    /* ====================================================
-     * MAIN UI
-     * ================================================== */
+    // =====================================================
+    // RENDER
+    // =====================================================
 
     return (
 
         <div
-
             style={{
-                backgroundColor:
-                    "#020617",
+                backgroundColor: "#020617",
 
-                minHeight:
-                    "100vh",
+                minHeight: "100vh",
 
-                padding:
-                    "20px",
+                padding: "20px",
 
-                fontFamily:
-                    "Arial",
-
-                color:
-                    "white"
+                color: "white"
             }}
         >
 
@@ -346,13 +444,12 @@ function App()
             {/* ========================================= */}
 
             <h1
-
                 style={{
-                    textAlign:
-                        "center",
+                    textAlign: "center",
 
-                    marginBottom:
-                        "40px"
+                    marginBottom: "40px",
+
+                    fontSize: "52px"
                 }}
             >
                 Intelligent Embedded Diagnostic System
@@ -360,23 +457,19 @@ function App()
 
 
             {/* ========================================= */}
-            {/* TOP GRID */}
+            {/* TOP CARDS */}
             {/* ========================================= */}
 
             <div
-
                 style={{
-                    display:
-                        "grid",
+                    display: "grid",
 
                     gridTemplateColumns:
                         "1fr 1fr",
 
-                    gap:
-                        "20px",
+                    gap: "20px",
 
-                    marginBottom:
-                        "30px"
+                    marginBottom: "30px"
                 }}
             >
 
@@ -385,37 +478,36 @@ function App()
                 />
 
                 <DeviceStatusCard
-                    connected={wsConnected}
-                    devices={fleetDevices}
+                    websocketStatus={
+                        websocketStatus
+                    }
+
+                    devices={devices}
                 />
 
             </div>
 
 
             {/* ========================================= */}
-            {/* FLEET STATS */}
+            {/* KPI CARDS */}
             {/* ========================================= */}
 
             <div
-
                 style={{
-                    display:
-                        "grid",
+                    display: "grid",
 
                     gridTemplateColumns:
-                        "repeat(auto-fit, minmax(250px, 1fr))",
+                        "repeat(4, 1fr)",
 
-                    gap:
-                        "20px",
+                    gap: "20px",
 
-                    marginBottom:
-                        "30px"
+                    marginBottom: "40px"
                 }}
             >
 
                 <FleetStatCard
                     title="Connected Devices"
-                    value={totalDevices}
+                    value={deviceList.length}
                 />
 
                 <FleetStatCard
@@ -437,45 +529,39 @@ function App()
 
 
             {/* ========================================= */}
-            {/* DEVICE GRID */}
+            {/* FLEET DEVICES */}
             {/* ========================================= */}
 
             <h2
-
                 style={{
-                    marginBottom:
-                        "20px"
+                    marginBottom: "20px"
                 }}
             >
                 Active Fleet Devices
             </h2>
 
             <div
-
                 style={{
-                    display:
-                        "grid",
+                    display: "grid",
 
                     gridTemplateColumns:
-                        "repeat(auto-fit, minmax(300px, 1fr))",
+                        "repeat(auto-fit, minmax(350px, 1fr))",
 
-                    gap:
-                        "20px",
+                    gap: "20px",
 
-                    marginBottom:
-                        "30px"
+                    marginBottom: "40px"
                 }}
             >
 
                 {
-                    fleetDevices.map(
-                        (
-                            device,
-                            index
-                        ) => (
+                    deviceList.map(
+                        (device) => (
 
                             <FleetDeviceCard
-                                key={index}
+                                key={
+                                    device.device_id
+                                }
+
                                 device={device}
                             />
                         )
@@ -486,63 +572,75 @@ function App()
 
 
             {/* ========================================= */}
-            {/* TELEMETRY ANALYTICS */}
+            {/* ANALYTICS + FEED */}
             {/* ========================================= */}
 
             <div
-
                 style={{
-                    backgroundColor:
-                        "#1E293B",
+                    display: "grid",
 
-                    padding:
-                        "20px",
+                    gridTemplateColumns:
+                        "2fr 1fr",
 
-                    borderRadius:
-                        "16px",
+                    gap: "20px",
 
-                    boxShadow:
-                        "0px 0px 15px rgba(0,0,0,0.4)",
-
-                    marginBottom:
-                        "30px"
+                    alignItems: "start"
                 }}
             >
 
-                <h2
+                {/* ===================================== */}
+                {/* TELEMETRY CHART */}
+                {/* ===================================== */}
 
+                <div
                     style={{
-                        marginBottom:
-                            "20px"
+                        backgroundColor: "#1E293B",
+
+                        padding: "20px",
+
+                        borderRadius: "12px",
+
+                        boxShadow:
+                            "0px 0px 10px rgba(0,0,0,0.4)"
                     }}
                 >
-                    Live Telemetry Analytics
-                </h2>
 
-                <TelemetryChart
-                    telemetryHistory={
-                        telemetryHistory
+                    <h2
+                        style={{
+                            marginBottom: "20px"
+                        }}
+                    >
+                        Live Telemetry Analytics
+                    </h2>
+
+                    <TelemetryChart
+                        telemetryHistory={
+                            telemetryHistory
+                        }
+                    />
+
+                </div>
+
+
+                {/* ===================================== */}
+                {/* ACTIVITY FEED */}
+                {/* ===================================== */}
+
+                <ActivityFeed
+                    activityFeed={
+                        activityFeed
                     }
                 />
 
             </div>
-
-
-            {/* ========================================= */}
-            {/* ACTIVITY FEED */}
-            {/* ========================================= */}
-
-            <ActivityFeed
-                activityFeed={activityFeed}
-            />
 
         </div>
     );
 }
 
 
-/* ========================================================
- * EXPORT
- * ====================================================== */
+// =========================================================
+// EXPORT
+// =========================================================
 
 export default App;

@@ -6,25 +6,40 @@
 // Author: HendyWab
 //
 // Description:
-// Displays backend and fleet connection state.
+// Displays backend and websocket status.
 //
 // =========================================================
 
 import React from "react";
 
 function DeviceStatusCard({
-    connected,
-    devices
+    websocketStatus,
+    devices = {}
 })
 {
+
+    // =====================================================
+    // DEVICE COUNT
+    // =====================================================
+
+    const deviceCount =
+        Object.keys(devices).length;
+
+
+    // =====================================================
+    // RENDER
+    // =====================================================
 
     return (
 
         <div
             style={{
                 backgroundColor: "#1E293B",
+
                 padding: "20px",
+
                 borderRadius: "12px",
+
                 boxShadow:
                     "0px 0px 10px rgba(0,0,0,0.4)"
             }}
@@ -37,16 +52,14 @@ function DeviceStatusCard({
             <p>
                 Registered Devices:
                 {" "}
-
                 <strong>
-                    {devices.length}
+                    {deviceCount}
                 </strong>
             </p>
 
             <p>
                 Backend Status:
                 {" "}
-
                 <strong>
                     operational
                 </strong>
@@ -59,17 +72,14 @@ function DeviceStatusCard({
                 <strong
                     style={{
                         color:
-                            connected
-                            ? "#4ADE80"
-                            : "#FF4D4D"
+                            websocketStatus === "connected"
+                            ? "#22C55E"
+                            : "#EF4444"
                     }}
                 >
-                    {
-                        connected
-                        ? "connected"
-                        : "disconnected"
-                    }
+                    {websocketStatus}
                 </strong>
+
             </p>
 
         </div>
