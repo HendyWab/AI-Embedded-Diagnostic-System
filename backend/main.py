@@ -13,6 +13,7 @@
 # - REST API routes
 # - WebSocket telemetry streaming
 # - MQTT infrastructure startup
+# - Historical telemetry retrieval
 # - Real-time observability
 # - Multi-device diagnostics
 #
@@ -44,6 +45,10 @@ from backend.routes.device_routes import (
     router as device_router
 )
 
+from backend.routes.history_routes import (
+    router as history_router
+)
+
 from backend.mqtt.mqtt_client import (
     start_mqtt
 )
@@ -52,7 +57,7 @@ import backend.mqtt.mqtt_client as mqtt_client
 
 
 # =========================================================
-# FASTAPI INIT
+# FASTAPI INITIALIZATION
 # =========================================================
 
 app = FastAPI(
@@ -61,12 +66,12 @@ app = FastAPI(
     "IEDS Backend API",
 
     version=
-    "0.4.0"
+    "0.5.0"
 )
 
 
 # =========================================================
-# CORS
+# CORS CONFIGURATION
 # =========================================================
 
 app.add_middleware(
@@ -88,7 +93,7 @@ app.add_middleware(
 
 
 # =========================================================
-# ROUTES
+# ROUTE REGISTRATION
 # =========================================================
 
 app.include_router(
@@ -99,9 +104,13 @@ app.include_router(
     device_router
 )
 
+app.include_router(
+    history_router
+)
+
 
 # =========================================================
-# STARTUP EVENT
+# APPLICATION STARTUP
 # =========================================================
 
 @app.on_event("startup")
@@ -130,12 +139,16 @@ async def startup_event():
     )
 
     print(
+        "Historical telemetry enabled"
+    )
+
+    print(
         "--------------------------------"
     )
 
 
 # =========================================================
-# ROOT ROUTE
+# ROOT ENDPOINT
 # =========================================================
 
 @app.get("/")
