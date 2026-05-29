@@ -271,21 +271,88 @@ http://localhost:5173
 
 # Running MQTT Broker
 
-Start Mosquitto MQTT Broker locally.
+IEDS uses an MQTT broker to receive real-time telemetry from embedded devices and simulators.
 
-Default broker:
+The recommended broker is Eclipse Mosquitto.
 
-```text
-localhost:1883
+## Install Mosquitto
+
+### Windows
+
+Download and install Mosquitto from:
+
+https://mosquitto.org/download/
+
+After installation, ensure Mosquitto is available in your system PATH.
+
+### Linux (Ubuntu/Debian)
+
+```bash
+sudo apt update
+sudo apt install mosquitto mosquitto-clients
 ```
 
-Example telemetry topics:
+### macOS
+
+```bash
+brew install mosquitto
+```
+
+---
+
+## Start the Broker
+
+### Windows
+
+```bash
+mosquitto -v
+```
+
+### Linux/macOS
+
+```bash
+mosquitto -v
+```
+
+Expected output:
+
+```text
+Opening ipv4 listen socket on port 1883
+Opening ipv6 listen socket on port 1883
+mosquitto version running
+```
+
+---
+
+## Default Broker Configuration
+
+```text
+Broker Address: localhost
+Port: 1883
+Protocol: MQTT
+```
+
+---
+
+## Example Telemetry Topics
 
 ```text
 ieds/esp32/telemetry
 ieds/stm32/telemetry
 ieds/pic/telemetry
 ```
+
+---
+
+## Verify Broker Availability
+
+You can verify that Mosquitto is running using:
+
+```bash
+mosquitto_sub -t "#" -v
+```
+
+If telemetry is being published, MQTT messages will appear in the terminal in real time.
 
 ---
 
