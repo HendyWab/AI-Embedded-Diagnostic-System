@@ -62,7 +62,8 @@ import
     fetchTelemetryHistory
 }
 from "./services/api";
-
+import TelemetryHistory
+from "./components/TelemetryHistory";
 
 // =========================================================
 // COMPONENT
@@ -631,6 +632,19 @@ function App()
                         activityFeed
                     }
                 />
+                <div
+                style={{
+                    marginTop: "30px"
+                }}
+            >
+
+                <TelemetryHistory
+                    telemetryHistory={
+                        telemetryHistory
+                    }
+                />
+
+            </div>
 
             </div>
 
