@@ -95,8 +95,12 @@ function App()
     const [websocketStatus,
            setWebsocketStatus] =
         useState("disconnected");
-
-
+    const [selectedDevice,
+           setSelectedDevice] =
+        useState("ALL");
+    const [emiFilter,
+       setEmiFilter] =
+    useState("ALL");
     // =====================================================
     // WEBSOCKET CONNECTION
     // =====================================================
@@ -149,16 +153,16 @@ function App()
                     // TELEMETRY HISTORY
                     // =====================================
 
-                    setTelemetryHistory(
-                        (previousHistory) =>
-                        [
+                        setTelemetryHistory(
+                            (previousHistory) =>
+                            [
 
-                            ...previousHistory,
+                                ...previousHistory,
 
-                            telemetryData
+                                telemetryData
 
-                        ].slice(-30)
-                    );
+                            ].slice(-200)
+                        );
 
 
                     // =====================================
@@ -573,82 +577,106 @@ function App()
 
 
             {/* ========================================= */}
-            {/* ANALYTICS + FEED */}
-            {/* ========================================= */}
-
-            <div
-                style={{
-                    display: "grid",
-
-                    gridTemplateColumns:
-                        "2fr 1fr",
-
-                    gap: "20px",
-
-                    alignItems: "start"
-                }}
-            >
-
-                {/* ===================================== */}
-                {/* TELEMETRY CHART */}
-                {/* ===================================== */}
+                {/* ANALYTICS + FEED */}
+                {/* ========================================= */}
 
                 <div
                     style={{
-                        backgroundColor: "#1E293B",
+                        display: "grid",
 
-                        padding: "20px",
+                        gridTemplateColumns:
+                            "2fr 1fr",
 
-                        borderRadius: "12px",
+                        gap: "20px",
 
-                        boxShadow:
-                            "0px 0px 10px rgba(0,0,0,0.4)"
+                        alignItems: "start"
                     }}
                 >
 
-                    <h2
+                    {/* ===================================== */}
+                    {/* TELEMETRY CHART */}
+                    {/* ===================================== */}
+
+                    <div
                         style={{
-                            marginBottom: "20px"
+                            backgroundColor: "#1E293B",
+
+                            padding: "20px",
+
+                            borderRadius: "12px",
+
+                            boxShadow:
+                                "0px 0px 10px rgba(0,0,0,0.4)"
                         }}
                     >
-                        Live Telemetry Analytics
-                    </h2>
 
-                    <TelemetryChart
+                        <h2
+                            style={{
+                                marginBottom: "20px"
+                            }}
+                        >
+                            Live Telemetry Analytics
+                        </h2>
+
+                        <TelemetryChart
+                            telemetryHistory={
+                                telemetryHistory
+                            }
+                        />
+
+                    </div>
+
+                                    {/* ===================================== */}
+                                    {/* ACTIVITY FEED */}
+                                    {/* ===================================== */}
+
+                                    <ActivityFeed
+                                        activityFeed={
+                                            activityFeed
+                                        }
+                                    />
+
+                                </div>
+
+                {/* ========================================= */}
+                {/* TELEMETRY HISTORY */}
+                {/* ========================================= */}
+
+                <div
+                    style={{
+                        marginTop: "30px"
+                    }}
+                >
+
+                   <TelemetryHistory
+
                         telemetryHistory={
                             telemetryHistory
                         }
+
+                        selectedDevice={
+                            selectedDevice
+                        }
+
+                        setSelectedDevice={
+                            setSelectedDevice
+                        }
+
+                        emiFilter={
+                            emiFilter
+                        }
+
+                        setEmiFilter={
+                            setEmiFilter
+                        }
+
                     />
 
                 </div>
 
-
-                {/* ===================================== */}
-                {/* ACTIVITY FEED */}
-                {/* ===================================== */}
-
-                <ActivityFeed
-                    activityFeed={
-                        activityFeed
-                    }
-                />
-                <div
-                style={{
-                    marginTop: "30px"
-                }}
-            >
-
-                <TelemetryHistory
-                    telemetryHistory={
-                        telemetryHistory
-                    }
-                />
-
             </div>
 
-            </div>
-
-        </div>
+       
     );
 }
 
