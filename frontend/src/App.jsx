@@ -666,24 +666,13 @@ function App()
                             emiFilter
                         }
 
-                <ActivityFeed
-                    activityFeed={
-                        activityFeed
-                    }
-                />
-                <div
-                style={{
-                    marginTop: "30px"
-                }}
-            >
+                        setEmiFilter={
+                            setEmiFilter
+                        }
 
-                <TelemetryHistory
-                    telemetryHistory={
-                        telemetryHistory
-                    }
-                />
+                    />
 
-            </div>
+                </div>
 
             </div>
 
