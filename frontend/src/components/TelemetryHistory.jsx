@@ -1,11 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
-
-function TelemetryHistory({
-    telemetryHistory = []
-})
-{
-=======
 import { saveAs }
 from "file-saver";
 
@@ -118,7 +111,6 @@ function TelemetryHistory({
             "telemetry_history.csv"
         );
     }
->>>>>>> feature5-v0.4-dashboard-enhancements
     return (
 
         <div
@@ -128,20 +120,6 @@ function TelemetryHistory({
                 borderRadius: "12px",
                 boxShadow:
                     "0px 0px 10px rgba(0,0,0,0.4)",
-<<<<<<< HEAD
-                maxHeight: "450px",
-                overflowY: "auto"
-            }}
-        >
-
-            <h2
-                style={{
-                    marginBottom: "20px"
-                }}
-            >
-                Telemetry History
-            </h2>
-=======
                 maxHeight: "350px",
                 overflowY: "auto"
             }}
@@ -270,17 +248,12 @@ function TelemetryHistory({
                 </div>
 
             </div>
->>>>>>> feature5-v0.4-dashboard-enhancements
 
             <table
                 style={{
                     width: "100%",
-<<<<<<< HEAD
-                    borderCollapse: "collapse",
-=======
                     borderCollapse:
                         "collapse",
->>>>>>> feature5-v0.4-dashboard-enhancements
                     color: "white"
                 }}
             >
@@ -291,15 +264,10 @@ function TelemetryHistory({
 
                         <th
                             style={{
-<<<<<<< HEAD
-                                textAlign: "left",
-                                padding: "10px"
-=======
                                 textAlign:
                                     "left",
                                 padding:
                                     "10px"
->>>>>>> feature5-v0.4-dashboard-enhancements
                             }}
                         >
                             Device
@@ -307,15 +275,10 @@ function TelemetryHistory({
 
                         <th
                             style={{
-<<<<<<< HEAD
-                                textAlign: "left",
-                                padding: "10px"
-=======
                                 textAlign:
                                     "left",
                                 padding:
                                     "10px"
->>>>>>> feature5-v0.4-dashboard-enhancements
                             }}
                         >
                             Signal
@@ -323,15 +286,10 @@ function TelemetryHistory({
 
                         <th
                             style={{
-<<<<<<< HEAD
-                                textAlign: "left",
-                                padding: "10px"
-=======
                                 textAlign:
                                     "left",
                                 padding:
                                     "10px"
->>>>>>> feature5-v0.4-dashboard-enhancements
                             }}
                         >
                             Score
@@ -339,15 +297,10 @@ function TelemetryHistory({
 
                         <th
                             style={{
-<<<<<<< HEAD
-                                textAlign: "left",
-                                padding: "10px"
-=======
                                 textAlign:
                                     "left",
                                 padding:
                                     "10px"
->>>>>>> feature5-v0.4-dashboard-enhancements
                             }}
                         >
                             EMI
@@ -355,15 +308,10 @@ function TelemetryHistory({
 
                         <th
                             style={{
-<<<<<<< HEAD
-                                textAlign: "left",
-                                padding: "10px"
-=======
                                 textAlign:
                                     "left",
                                 padding:
                                     "10px"
->>>>>>> feature5-v0.4-dashboard-enhancements
                             }}
                         >
                             Timestamp
@@ -376,18 +324,12 @@ function TelemetryHistory({
                 <tbody>
 
                     {
-<<<<<<< HEAD
-                        [...telemetryHistory]
-                            .reverse()
-                            .slice(0, 100)
-=======
                         [...filteredHistory]
 
                             .reverse()
 
                             .slice(0, 100)
 
->>>>>>> feature5-v0.4-dashboard-enhancements
                             .map(
                                 (
                                     record,
@@ -400,12 +342,8 @@ function TelemetryHistory({
 
                                         <td
                                             style={{
-<<<<<<< HEAD
-                                                padding: "8px"
-=======
                                                 padding:
                                                     "8px"
->>>>>>> feature5-v0.4-dashboard-enhancements
                                             }}
                                         >
                                             {
@@ -415,13 +353,6 @@ function TelemetryHistory({
 
                                         <td
                                             style={{
-<<<<<<< HEAD
-                                                padding: "8px"
-                                            }}
-                                        >
-                                            {
-                                                record.signal_quality
-=======
                                                 padding:
                                                     "8px"
                                             }}
@@ -432,19 +363,11 @@ function TelemetryHistory({
                                                 ).toFixed(
                                                     2
                                                 )
->>>>>>> feature5-v0.4-dashboard-enhancements
                                             }
                                         </td>
 
                                         <td
                                             style={{
-<<<<<<< HEAD
-                                                padding: "8px"
-                                            }}
-                                        >
-                                            {
-                                                record.anomaly_score
-=======
                                                 padding:
                                                     "8px"
                                             }}
@@ -455,19 +378,11 @@ function TelemetryHistory({
                                                 ).toFixed(
                                                     2
                                                 )
->>>>>>> feature5-v0.4-dashboard-enhancements
                                             }
                                         </td>
 
                                         <td
                                             style={{
-<<<<<<< HEAD
-                                                padding: "8px",
-                                                color:
-                                                    record.emi_detected
-                                                    ? "#EF4444"
-                                                    : "#22C55E"
-=======
                                                 padding:
                                                     "8px",
 
@@ -478,7 +393,6 @@ function TelemetryHistory({
 
                                                 fontWeight:
                                                     "bold"
->>>>>>> feature5-v0.4-dashboard-enhancements
                                             }}
                                         >
                                             {
@@ -490,13 +404,6 @@ function TelemetryHistory({
 
                                         <td
                                             style={{
-<<<<<<< HEAD
-                                                padding: "8px"
-                                            }}
-                                        >
-                                            {
-                                                record.timestamp
-=======
                                                 padding:
                                                     "8px"
                                             }}
@@ -514,7 +421,6 @@ function TelemetryHistory({
                                                     0,
                                                     19
                                                 )
->>>>>>> feature5-v0.4-dashboard-enhancements
                                             }
                                         </td>
 
@@ -528,10 +434,6 @@ function TelemetryHistory({
             </table>
 
         </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> feature5-v0.4-dashboard-enhancements
     );
 }
 
