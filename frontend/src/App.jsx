@@ -65,6 +65,11 @@ from "./services/api";
 import TelemetryHistory
 from "./components/TelemetryHistory";
 
+import PlatformHealthCard
+from "./components/PlatformHealthCard";
+import DeviceAvailabilityPanel
+from "./components/DeviceAvailabilityPanel";
+
 // =========================================================
 // COMPONENT
 // =========================================================
@@ -101,6 +106,24 @@ function App()
     const [emiFilter,
        setEmiFilter] =
     useState("ALL");
+
+    const [systemMetrics,
+       setSystemMetrics] =
+    useState({
+
+        mqttStatus: "ONLINE",
+
+        databaseStatus: "ONLINE",
+
+        websocketClients: 1,
+
+        messagesReceived: 0,
+
+        startTime: Date.now()
+    });
+
+    const [onlineDevices, setOnlineDevices] = useState([]);
+    const [offlineDevices, setOfflineDevices] = useState([]);
     // =====================================================
     // WEBSOCKET CONNECTION
     // =====================================================
@@ -118,11 +141,14 @@ function App()
                 (telemetryData) =>
                 {
 
-                    console.log(
-                        "Telemetry received:",
-                        telemetryData
+                   console.log(
+                        "FULL TELEMETRY PAYLOAD",
+                        JSON.stringify(
+                            telemetryData,
+                            null,
+                            2
+                        )
                     );
-
                     // =====================================
                     // CURRENT TELEMETRY
                     // =====================================
@@ -130,7 +156,34 @@ function App()
                     setTelemetry(
                         telemetryData
                     );
+                    setOnlineDevices(
+                            telemetryData.online_device_list || []
+                        );
+                    console.log(
+                        "ONLINE DEVICE LIST:",
+                        telemetryData.online_device_list
+                    );
 
+                    console.log(
+                        "OFFLINE DEVICE LIST:",
+                        telemetryData.offline_device_list
+                    );
+
+                    console.log(
+                        "FLEET HEALTH:",
+                        telemetryData.fleet_health
+                    );
+                    setOfflineDevices(
+                            telemetryData.offline_device_list || []
+                        );
+                    setSystemMetrics(
+                        previous => ({
+                            ...previous,
+
+                            messagesReceived:
+                                previous.messagesReceived + 1
+                        })
+                    );
 
                     // =====================================
                     // DEVICE REGISTRY
@@ -403,28 +456,33 @@ function App()
     // FLEET HEALTH
     // =====================================================
 
-    const fleetHealth =
-        deviceList.length > 0
+   const fleetHealth =
+    telemetry?.fleet_health || 100;
 
-        ?
+     
+   const uptimeSeconds =
+
+    Math.floor(
 
         (
-            (
-                deviceList.filter(
-                    (device) =>
-                        !device.emi_detected
-                ).length
+            Date.now() -
+            systemMetrics.startTime
+        ) / 1000
+    );
 
-                /
+    const uptimeDisplay =
 
-                deviceList.length
-            ) * 100
-        ).toFixed(0)
+        `${Math.floor(
+            uptimeSeconds / 3600
+        )}h ${Math.floor(
+            (uptimeSeconds % 3600) / 60
+        )}m`;
 
-        :
+    const totalRecords =
+        telemetryHistory.length;
 
-        "0";
-
+    const websocketClients =
+        systemMetrics.websocketClients;
 
     // =====================================================
     // RENDER
@@ -482,13 +540,21 @@ function App()
                     telemetry={telemetry}
                 />
 
-                <DeviceStatusCard
+               <PlatformHealthCard
+
                     websocketStatus={
                         websocketStatus
                     }
 
-                    devices={devices}
+                    systemMetrics={
+                        systemMetrics
+                    }
+
+                    uptimeDisplay={
+                        uptimeDisplay
+                    }
                 />
+              
 
             </div>
 
@@ -497,6 +563,39 @@ function App()
             {/* KPI CARDS */}
             {/* ========================================= */}
 
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                        "repeat(4, 1fr)",
+                    gap: "20px",
+                    marginBottom: "40px"
+                }}
+            >
+
+                <FleetStatCard
+                    title="Live Messages "
+                    value={
+                        systemMetrics.messagesReceived
+                    }
+                />
+
+                <FleetStatCard
+                    title="Database Records"
+                    value={totalRecords}
+                />
+
+                <FleetStatCard
+                    title="WebSocket Clients"
+                    value={websocketClients}
+                />
+
+                <FleetStatCard
+                    title="System Uptime"
+                    value={uptimeDisplay}
+                />
+
+            </div>
             <div
                 style={{
                     display: "grid",
@@ -510,25 +609,27 @@ function App()
                 }}
             >
 
-                <FleetStatCard
+               <FleetStatCard
                     title="Connected Devices"
                     value={deviceList.length}
                 />
 
                 <FleetStatCard
-                    title="Active EMI Alerts"
-                    value={activeAlerts}
+                    title="Online Devices"
+                    value={onlineDevices.length}
                 />
 
                 <FleetStatCard
-                    title="Average Signal"
-                    value={averageSignal}
+                    title="Offline Devices"
+                    value={offlineDevices.length}
                 />
 
                 <FleetStatCard
                     title="Fleet Health"
                     value={`${fleetHealth}%`}
                 />
+
+             
 
             </div>
 
@@ -625,22 +726,47 @@ function App()
                         />
 
                     </div>
+                   
+            {/* ===================================== */}
+            {/* ACTIVITY FEED */}
+            {/* ===================================== */}
 
-                                    {/* ===================================== */}
-                                    {/* ACTIVITY FEED */}
-                                    {/* ===================================== */}
+                    <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "2fr 1fr",
+                        gap: "20px",
+                        marginTop: "20px"
+                    }}
+                >
 
-                                    <ActivityFeed
-                                        activityFeed={
-                                            activityFeed
-                                        }
-                                    />
 
-                                </div>
+                    <div>
 
-                {/* ========================================= */}
-                {/* TELEMETRY HISTORY */}
-                {/* ========================================= */}
+                        <DeviceAvailabilityPanel
+                            onlineDevices={onlineDevices}
+                            offlineDevices={offlineDevices}
+                        />
+
+                        <div
+                            style={{
+                                marginTop: "20px"
+                            }}
+                        >
+                            <ActivityFeed
+                                activityFeed={activityFeed}
+                            />
+                        </div>
+
+                    </div>
+
+                </div>
+
+                </div>
+
+            {/* ========================================= */}
+            {/* TELEMETRY HISTORY */}
+            {/* ========================================= */}
 
                 <div
                     style={{

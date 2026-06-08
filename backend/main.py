@@ -5,33 +5,9 @@
 #
 # Author: HendyWab
 #
-# Description:
-# Main FastAPI backend entry point
-# for distributed telemetry diagnostics.
-#
-# Features:
-# - REST API routes
-# - WebSocket telemetry streaming
-# - MQTT infrastructure startup
-# - Historical telemetry retrieval
-# - Real-time observability
-# - Multi-device diagnostics
-#
 # =========================================================
 
-
-# =========================================================
-# IMPORTS
-# =========================================================
-
-import json
-
-import asyncio
-
-from fastapi import (
-    FastAPI,
-    WebSocket
-)
+from fastapi import FastAPI
 
 from fastapi.middleware.cors import (
     CORSMiddleware
@@ -49,11 +25,21 @@ from backend.routes.history_routes import (
     router as history_router
 )
 
+from backend.routes.websocket import (
+    router as websocket_router
+)
+
 from backend.mqtt.mqtt_client import (
     start_mqtt
 )
 
-import backend.mqtt.mqtt_client as mqtt_client
+from backend.database.db import (
+    engine
+)
+
+from backend.models.telemetry_db_model import (
+    Base
+)
 
 
 # =========================================================
@@ -108,6 +94,10 @@ app.include_router(
     history_router
 )
 
+app.include_router(
+    websocket_router
+)
+
 
 # =========================================================
 # APPLICATION STARTUP
@@ -115,6 +105,18 @@ app.include_router(
 
 @app.on_event("startup")
 async def startup_event():
+
+    # =====================================
+    # DATABASE INITIALIZATION
+    # =====================================
+
+    Base.metadata.create_all(
+        bind=engine
+    )
+
+    # =====================================
+    # MQTT INITIALIZATION
+    # =====================================
 
     start_mqtt()
 
@@ -124,6 +126,10 @@ async def startup_event():
 
     print(
         "IEDS Backend Started"
+    )
+
+    print(
+        "Database initialized"
     )
 
     print(
@@ -159,43 +165,3 @@ def root():
         "message":
         "IEDS Backend Running"
     }
-
-
-# =========================================================
-# WEBSOCKET TELEMETRY STREAM
-# =========================================================
-
-@app.websocket("/ws/telemetry")
-async def websocket_telemetry(
-    websocket: WebSocket
-):
-
-    await websocket.accept()
-
-    print(
-        "WebSocket client connected"
-    )
-
-    try:
-
-        while True:
-
-            if mqtt_client.latest_telemetry:
-
-                await websocket.send_text(
-
-                    json.dumps(
-
-                        mqtt_client.latest_telemetry
-                    )
-                )
-
-            await asyncio.sleep(1)
-
-    except Exception as error:
-
-        print(
-            "WebSocket disconnected"
-        )
-
-        print(error)

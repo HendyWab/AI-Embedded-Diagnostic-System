@@ -20,10 +20,7 @@ from fastapi import (
     WebSocket
 )
 
-from backend.mqtt.mqtt_client import (
-    latest_telemetry
-)
-
+import backend.mqtt.mqtt_client as mqtt_client
 
 # =========================================================
 # ROUTER INITIALIZATION
@@ -51,11 +48,55 @@ async def telemetry_websocket(
 
         while True:
 
-            if latest_telemetry:
+            if mqtt_client.latest_telemetry:
 
+                websocket_payload = {
+
+                    **mqtt_client.latest_telemetry,
+
+                    "online_devices":
+                    len(mqtt_client.get_online_devices()),
+
+                    "offline_devices":
+                    len(mqtt_client.get_offline_devices()),
+
+                    "fleet_health":
+                    mqtt_client.get_fleet_health(),
+
+                    "online_device_list":
+                    mqtt_client.get_online_devices(),
+
+                    "offline_device_list":
+                    mqtt_client.get_offline_devices()
+                }
+                print(
+                    "ONLINE:",
+                    mqtt_client.get_online_devices()
+                )
+
+                print(
+                    "OFFLINE:",
+                    mqtt_client.get_offline_devices()
+                )
+
+                print(
+                    "FLEET:",
+                    mqtt_client.get_fleet_health()
+                )
+                print(
+                    "WEBSOCKET PAYLOAD:",
+                    websocket_payload
+                )
+                print(
+                "WEBSOCKET PAYLOAD:",
+                json.dumps(
+                    websocket_payload,
+                    indent=2
+                )
+)
                 await websocket.send_text(
                     json.dumps(
-                        latest_telemetry
+                        websocket_payload
                     )
                 )
 
