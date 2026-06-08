@@ -15,6 +15,8 @@
 # - SQLite persistence
 # - Real-time WebSocket broadcasting
 # - Device registry support
+# - Device heartbeat monitoring
+# - Fleet health monitoring
 # - Fault-tolerant MQTT initialization
 #
 # =========================================================
@@ -25,8 +27,9 @@
 # =========================================================
 
 import json
-
 import asyncio
+
+from datetime import datetime
 
 import paho.mqtt.client as mqtt
 
@@ -61,6 +64,78 @@ MQTT_TOPIC = "ieds/devices/+/telemetry"
 active_devices = set()
 
 latest_telemetry = {}
+
+# =========================================================
+# DEVICE MONITORING
+# =========================================================
+
+device_last_seen = {}
+
+OFFLINE_TIMEOUT_SECONDS = 30
+
+
+# =========================================================
+# DEVICE STATUS HELPERS
+# =========================================================
+
+def get_online_devices():
+
+    now = datetime.utcnow()
+
+    return [
+
+        device
+
+        for device, last_seen
+
+        in device_last_seen.items()
+
+        if (
+            now - last_seen
+        ).total_seconds()
+
+        < OFFLINE_TIMEOUT_SECONDS
+    ]
+
+
+def get_offline_devices():
+
+    now = datetime.utcnow()
+
+    return [
+
+        device
+
+        for device, last_seen
+
+        in device_last_seen.items()
+
+        if (
+            now - last_seen
+        ).total_seconds()
+
+        >= OFFLINE_TIMEOUT_SECONDS
+    ]
+
+
+def get_fleet_health():
+
+    total = len(
+        device_last_seen
+    )
+
+    if total == 0:
+
+        return 100
+
+    online = len(
+        get_online_devices()
+    )
+
+    return round(
+        (online / total) * 100,
+        1
+    )
 
 
 # =========================================================
@@ -114,6 +189,14 @@ def on_message(
             device_id
         )
 
+        # =================================================
+        # HEARTBEAT UPDATE
+        # =================================================
+
+        device_last_seen[
+            device_id
+        ] = datetime.utcnow()
+
         latest_telemetry = payload
 
         print(
@@ -121,42 +204,8 @@ def on_message(
             payload
         )
 
-
         # =================================================
-        # DATABASE STORAGE
-        # =================================================
-
-        db = SessionLocal()
-
-        telemetry_record = TelemetryRecord(
-
-            device_id=
-            payload["device_id"],
-
-            anomaly_score=
-            payload["anomaly_score"],
-
-            signal_quality=
-            payload["signal_quality"],
-
-            emi_detected=
-            payload["emi_detected"],
-
-            timestamp=
-            payload["timestamp"]
-        )
-
-        db.add(
-            telemetry_record
-        )
-
-        db.commit()
-
-        db.close()
-
-
-        # =================================================
-        # WEBSOCKET BROADCAST
+        # WEBSOCKET PAYLOAD
         # =================================================
 
         websocket_payload = {
@@ -164,14 +213,111 @@ def on_message(
             **payload,
 
             "registered_devices":
-            len(active_devices)
+            len(active_devices),
+
+            "online_devices":
+            len(
+                get_online_devices()
+            ),
+
+            "offline_devices":
+            len(
+                get_offline_devices()
+            ),
+
+            "fleet_health":
+            get_fleet_health(),
+
+            "online_device_list":
+            get_online_devices(),
+
+            "offline_device_list":
+            get_offline_devices()
         }
 
-        asyncio.run(
-            manager.broadcast(
-                websocket_payload
+        # =================================================
+        # DATABASE STORAGE
+        # =================================================
+
+        try:
+
+            db = SessionLocal()
+
+            telemetry_record = TelemetryRecord(
+
+                device_id=
+                payload["device_id"],
+
+                anomaly_score=
+                payload["anomaly_score"],
+
+                signal_quality=
+                payload["signal_quality"],
+
+                emi_detected=
+                payload["emi_detected"],
+
+                timestamp=
+                payload["timestamp"]
             )
+
+            db.add(
+                telemetry_record
+            )
+
+            db.commit()
+
+            db.close()
+
+        except Exception as db_error:
+
+            print(
+                "Database storage failed:",
+                db_error
+            )
+
+        # =================================================
+        # DEBUG TELEMETRY STATUS
+        # =================================================
+
+        print(
+            "ONLINE DEVICES:",
+            get_online_devices()
         )
+
+        print(
+            "OFFLINE DEVICES:",
+            get_offline_devices()
+        )
+
+        print(
+            "FLEET HEALTH:",
+            get_fleet_health()
+        )
+
+        print(
+            "WEBSOCKET PAYLOAD:",
+            websocket_payload
+        )
+
+        # =================================================
+        # WEBSOCKET BROADCAST
+        # =================================================
+
+        try:
+
+            asyncio.run(
+                manager.broadcast(
+                    websocket_payload
+                )
+            )
+
+        except Exception as websocket_error:
+
+            print(
+                "WebSocket broadcast failed:",
+                websocket_error
+            )
 
     except Exception as error:
 
@@ -179,7 +325,6 @@ def on_message(
             "MQTT processing error:",
             error
         )
-
 
 # =========================================================
 # MQTT CLIENT INITIALIZATION

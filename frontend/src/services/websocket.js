@@ -72,9 +72,9 @@ export function connectWebSocket(
                 event.data
             );
 
-        console.log(
-            "Telemetry received:",
-            data
+       console.log(
+            "FULL TELEMETRY PAYLOAD",
+            JSON.stringify(data, null, 2)
         );
 
         onMessage(data);

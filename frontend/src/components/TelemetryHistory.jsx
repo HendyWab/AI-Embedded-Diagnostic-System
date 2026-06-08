@@ -113,17 +113,13 @@ function TelemetryHistory({
     }
     return (
 
-        <div
-            style={{
-                backgroundColor: "#1E293B",
-                padding: "20px",
-                borderRadius: "12px",
-                boxShadow:
-                    "0px 0px 10px rgba(0,0,0,0.4)",
-                maxHeight: "350px",
-                overflowY: "auto"
-            }}
-        >
+                 <div
+                    style={{
+                        backgroundColor: "#1E293B",
+                        padding: "20px",
+                        borderRadius: "12px"
+                    }}
+                >
                 <div
                     style={{
                         display: "flex",
@@ -248,190 +244,204 @@ function TelemetryHistory({
                 </div>
 
             </div>
+                <div
+                    style={{
+                        maxHeight: "500px",
+                        overflowY: "auto"
+                    }}
+                >
+                    <table
+                        style={{
+                            width: "100%",
+                            borderCollapse:
+                                "collapse",
+                            color: "white"
+                        }}
+                    >
 
-            <table
-                style={{
-                    width: "100%",
-                    borderCollapse:
-                        "collapse",
-                    color: "white"
-                }}
-            >
-
-                <thead>
-
-                    <tr>
-
-                        <th
+                        <thead
                             style={{
-                                textAlign:
-                                    "left",
-                                padding:
-                                    "10px"
+                                position: "sticky",
+                                top: 0,
+                                backgroundColor: "#1E293B",
+                                zIndex: 10
                             }}
+                                                
                         >
-                            Device
-                        </th>
 
-                        <th
-                            style={{
-                                textAlign:
-                                    "left",
-                                padding:
-                                    "10px"
-                            }}
-                        >
-                            Signal
-                        </th>
+                            <tr>
 
-                        <th
-                            style={{
-                                textAlign:
-                                    "left",
-                                padding:
-                                    "10px"
-                            }}
-                        >
-                            Score
-                        </th>
+                                <th
+                                    style={{
+                                        textAlign:
+                                            "left",
+                                        padding:
+                                            "10px"
+                                    }}
+                                >
+                                    Device
+                                </th>
 
-                        <th
-                            style={{
-                                textAlign:
-                                    "left",
-                                padding:
-                                    "10px"
-                            }}
-                        >
-                            EMI
-                        </th>
+                                <th
+                                    style={{
+                                        textAlign:
+                                            "left",
+                                        padding:
+                                            "10px"
+                                    }}
+                                >
+                                    Signal
+                                </th>
 
-                        <th
-                            style={{
-                                textAlign:
-                                    "left",
-                                padding:
-                                    "10px"
-                            }}
-                        >
-                            Timestamp
-                        </th>
+                                <th
+                                    style={{
+                                        textAlign:
+                                            "left",
+                                        padding:
+                                            "10px"
+                                    }}
+                                >
+                                    Score
+                                </th>
 
-                    </tr>
+                                <th
+                                    style={{
+                                        textAlign:
+                                            "left",
+                                        padding:
+                                            "10px"
+                                    }}
+                                >
+                                    EMI
+                                </th>
 
-                </thead>
+                                <th
+                                    style={{
+                                        textAlign:
+                                            "left",
+                                        padding:
+                                            "10px"
+                                    }}
+                                >
+                                    Timestamp
+                                </th>
 
-                <tbody>
+                            </tr>
 
-                    {
-                        [...filteredHistory]
+                        </thead>
 
-                            .reverse()
+                        <tbody>
 
-                            .slice(0, 100)
+                            {
+                                [...filteredHistory]
 
-                            .map(
-                                (
-                                    record,
-                                    index
-                                ) => (
+                                    .reverse()
 
-                                    <tr
-                                        key={index}
-                                    >
+                                    .slice(0, 100)
 
-                                        <td
-                                            style={{
-                                                padding:
-                                                    "8px"
-                                            }}
-                                        >
-                                            {
-                                                record.device_id
-                                            }
-                                        </td>
+                                    .map(
+                                        (
+                                            record,
+                                            index
+                                        ) => (
 
-                                        <td
-                                            style={{
-                                                padding:
-                                                    "8px"
-                                            }}
-                                        >
-                                            {
-                                                Number(
-                                                    record.signal_quality
-                                                ).toFixed(
-                                                    2
-                                                )
-                                            }
-                                        </td>
+                                            <tr
+                                                key={index}
+                                            >
 
-                                        <td
-                                            style={{
-                                                padding:
-                                                    "8px"
-                                            }}
-                                        >
-                                            {
-                                                Number(
-                                                    record.anomaly_score
-                                                ).toFixed(
-                                                    2
-                                                )
-                                            }
-                                        </td>
+                                                <td
+                                                    style={{
+                                                        padding:
+                                                            "8px"
+                                                    }}
+                                                >
+                                                    {
+                                                        record.device_id
+                                                    }
+                                                </td>
 
-                                        <td
-                                            style={{
-                                                padding:
-                                                    "8px",
+                                                <td
+                                                    style={{
+                                                        padding:
+                                                            "8px"
+                                                    }}
+                                                >
+                                                    {
+                                                        Number(
+                                                            record.signal_quality
+                                                        ).toFixed(
+                                                            2
+                                                        )
+                                                    }
+                                                </td>
 
-                                                color:
-                                                    record.emi_detected
-                                                    ? "#EF4444"
-                                                    : "#22C55E",
+                                                <td
+                                                    style={{
+                                                        padding:
+                                                            "8px"
+                                                    }}
+                                                >
+                                                    {
+                                                        Number(
+                                                            record.anomaly_score
+                                                        ).toFixed(
+                                                            2
+                                                        )
+                                                    }
+                                                </td>
 
-                                                fontWeight:
-                                                    "bold"
-                                            }}
-                                        >
-                                            {
-                                                record.emi_detected
-                                                    ? "ALERT"
-                                                    : "NORMAL"
-                                            }
-                                        </td>
+                                                <td
+                                                    style={{
+                                                        padding:
+                                                            "8px",
 
-                                        <td
-                                            style={{
-                                                padding:
-                                                    "8px"
-                                            }}
-                                        >
-                                            {
-                                                new Date(
-                                                    record.timestamp
-                                                )
-                                                .toISOString()
-                                                .replace(
-                                                    "T",
-                                                    " "
-                                                )
-                                                .slice(
-                                                    0,
-                                                    19
-                                                )
-                                            }
-                                        </td>
+                                                        color:
+                                                            record.emi_detected
+                                                            ? "#EF4444"
+                                                            : "#22C55E",
 
-                                    </tr>
-                                )
-                            )
-                    }
+                                                        fontWeight:
+                                                            "bold"
+                                                    }}
+                                                >
+                                                    {
+                                                        record.emi_detected
+                                                            ? "ALERT"
+                                                            : "NORMAL"
+                                                    }
+                                                </td>
 
-                </tbody>
+                                                <td
+                                                    style={{
+                                                        padding:
+                                                            "8px"
+                                                    }}
+                                                >
+                                                    {
+                                                        new Date(
+                                                            record.timestamp
+                                                        )
+                                                        .toISOString()
+                                                        .replace(
+                                                            "T",
+                                                            " "
+                                                        )
+                                                        .slice(
+                                                            0,
+                                                            19
+                                                        )
+                                                    }
+                                                </td>
 
-            </table>
+                                            </tr>
+                                        )
+                                    )
+                            }
+
+                        </tbody>
+
+                    </table>
+                </div>
 
         </div>
     );
