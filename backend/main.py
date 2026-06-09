@@ -40,7 +40,9 @@ from backend.database.db import (
 from backend.models.telemetry_db_model import (
     Base
 )
-
+from backend.routes.analytics_routes import (
+    router as analytics_router
+)
 
 # =========================================================
 # FASTAPI INITIALIZATION
@@ -97,7 +99,9 @@ app.include_router(
 app.include_router(
     websocket_router
 )
-
+app.include_router(
+    analytics_router
+)
 
 # =========================================================
 # APPLICATION STARTUP
