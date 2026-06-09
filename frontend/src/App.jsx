@@ -69,6 +69,10 @@ import PlatformHealthCard
 from "./components/PlatformHealthCard";
 import DeviceAvailabilityPanel
 from "./components/DeviceAvailabilityPanel";
+import {
+    fetchFleetAnalytics
+}
+from "./services/analyticsService";
 
 // =========================================================
 // COMPONENT
@@ -124,6 +128,27 @@ function App()
 
     const [onlineDevices, setOnlineDevices] = useState([]);
     const [offlineDevices, setOfflineDevices] = useState([]);
+
+    const [
+
+            fleetAnalytics,
+
+            setFleetAnalytics
+
+        ] = useState({
+
+            average_signal: 0,
+
+            average_anomaly: 0,
+
+            active_alerts: 0,
+
+            online_devices: 0,
+
+            fleet_health: 100,
+
+            total_records: 0
+        });
     // =====================================================
     // WEBSOCKET CONNECTION
     // =====================================================
@@ -282,7 +307,46 @@ function App()
 
     }, []);
 
+    //======================================================
+    //Analytics
+    //======================================================
 
+    useEffect(() =>
+    {
+        async function loadAnalytics()
+        {
+            try
+            {
+                const analytics =
+                    await fetchFleetAnalytics();
+
+                setFleetAnalytics(
+                    analytics
+                );
+            }
+
+            catch(error)
+            {
+                console.error(
+                    error
+                );
+            }
+        }
+
+        loadAnalytics();
+
+        const interval =
+            setInterval(
+                loadAnalytics,
+                5000
+            );
+
+        return () =>
+            clearInterval(
+                interval
+            );
+
+    }, []);
     // =====================================================
     // LOAD TELEMETRY HISTORY
     // =====================================================
