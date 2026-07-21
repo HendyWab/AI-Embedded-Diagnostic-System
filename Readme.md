@@ -186,7 +186,12 @@ Clone the repository:
 git clone https://github.com/HendyWab/AI-Embedded-Diagnostic-System.git
 cd AI-Embedded-Diagnostic-System
 ```
+or 
+```bash
+git clone git@github.com:HendyWab/AI-Embedded-Diagnostic-System.git
+cd AI-Embedded-Diagnostic-System
 
+```
 ---
 
 # Backend Setup
